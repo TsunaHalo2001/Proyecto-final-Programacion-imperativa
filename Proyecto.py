@@ -17,16 +17,24 @@ def regist():
     pass
 
 def login():
-    pass
+    global main, fmainmenu, finicio, flogin
+
+    fmainmenu.grid_remove()
+    main.grid(row = 0, column = 0)
+
+    main.add(finicio, text = "Inicio")
+    main.hide(finicio)
+    main.add(flogin, text = "Iniciar sesion")
+    main.add(finicio, text = "Inicio")    
 
 def run():
-    global ssize, fsize, root, ico, photo, fmainmenu
+    global ssize, fsize, root, ico, photo, main, fmainmenu, finicio, flogin
 
     root = tkinter.Tk()
     
     sv_ttk.set_theme("light")
 
-    ssize = (root.winfo_screenwidth() , root.winfo_screenheight())
+    ssize = (root.winfo_screenwidth(), root.winfo_screenheight())
     fsize = int((35 / 1366) * ssize[0])
     trissize = int((455 / 1366) * ssize[0])
     root.state("zoomed")
@@ -37,7 +45,7 @@ def run():
     photo = ImageTk.PhotoImage(ico)
     root.wm_iconphoto(False, photo)
 
-    #main = ttk.Notebook(root)
+    main = ttk.Notebook(root)
 
     #MENU PRINCIPAL
 
@@ -64,6 +72,14 @@ def run():
 
     fblspace = Frame(fmainmenu, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
 
+    #INICIO
+
+    finicio = Frame(main, bg = bgcolor)
+
+    #LOGIN
+
+    flogin = Frame(main, bg = bgcolor)
+
     #Posicionamiento de Frames
 
     fmainmenu.grid(row = 0, column = 0)
@@ -80,8 +96,6 @@ def run():
     bregist.grid(row = 1, column = 4)
     blogin.grid(row = 2, column = 4)
     ftrspace.grid(row = 0, column = 5)
-
-    #main.grid(row = 0, column = 0)
 
     root.mainloop()
 
