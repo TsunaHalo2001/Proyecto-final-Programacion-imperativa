@@ -1,90 +1,6 @@
-import tkinter
-from tkinter import *
-from tkinter import ttk, messagebox
-from PIL import Image, ImageTk
-import numpy as np
-import hashlib
-
-#Tema mamalon Sun Valley
-import sv_ttk
-
-#Variables globales
-#Variable del estado del programa
-#0 = Menu principal
-#1 = Login y registro
-#2 = Bienvenido
-pstate = 0
-
-#Variables de ruta de archivos
-#Variable de ruta de la base de datos de usuarios y contraseñas
-uplist = "txt/registro_inicio.txt"
-cplist = "txt/password.txt"
-
-#Variables de fuente y color
-ftitle = "MS Sans Serif"
-fctitle = "#505050"
-bgcolor = "#DCDCDC"
-
-#Variables de texto
-mrtitle = "My restaurant"
-mydescription = "\nYa sea que busques un almuerzo casual con\namigos, una cena romántica o un evento\nespecial, nuestro restaurante\npromete una experiencia que cautivará tu\npaladar y creará recuerdos duraderos.\n"
-usuario = "."
-
-#Variables de tamaño
-logoar = 567 / 487
-bwregist = 37 / 1366
-
-#Descifrar lista de usuarios y contraseñas
-txtloginlist = open(uplist, "r")
-loginlist = txtloginlist.read()
-txtloginlist.close()
-loginlist = loginlist.replace("']", "").replace("['", "")
-lloginlist = loginlist.split("', '")
-
-#Descifrar lista de contraseñas cifradas
-txtcpassword = open(cplist, "r")
-cpassword = txtcpassword.read()
-txtcpassword.close()
-cpassword = cpassword.replace("']", "").replace("['", "")
-lcpassword = cpassword.split("', '")
-
-#Base de datos de correos
-emaildb = ["@correounivalle.edu.co","@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com", "@live.com", "@msn.com", "@aol.com", "@yandex.com", "@protonmail.com", "@zoho.com", "@gmx.com", "@mail.com", "@yopmail.com", "@tutanota.com", "@mail.ru", "@gmx.us", "@gmx.de", "@gmx.fr", "@gmx.at", "@gmx.ch", "@gmx.net", "@gmx.co.uk", "@gmx.com.mx", "@gmx.es", "@gmx.eu", "@gmx.it", "@gmx.com.br", "@gmx.com.ar", "@gmx.com.co", "@gmx.com.ve", "@gmx.com.pe", "@gmx.com.ec", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.pa", "@gmx.com.do", "@gmx.com.gt", "@gmx.com.sv", "@gmx.com.hn", "@gmx.com.ni", "@gmx.com.cr", "@gmx.com.cu", "@gmx.com.pr", "@gmx.com.jm", "@gmx.com.bb", "@gmx.com.ag", "@gmx.com.dm", "@gmx.com.vc", "@gmx.com.lc", "@gmx.com.gy", "@gmx.com.sr", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.ar", "@gmx.com.co", "@gmx.com.ve", "@gmx.com.pe", "@gmx.com.ec", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.pa", "@gmx.com.do", "@gmx.com.gt", "@gmx.com.sv", "@gmx.com.hn", "@gmx.com.ni", "@gmx.com.cr", "@gmx.com.cu", "@gmx.com.pr", "@gmx.com.jm", "@gmx.com.bb", "@gmx.com.ag", "@gmx.com.dm", "@gmx.com.vc", "@gmx.com.lc", "@gmx.com.gy", "@gmx.com.sr", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy"]
+from configfile import *
 
 #Funciones
-#Funcion para volver a la pantalla anterior
-def back():
-    #Variables globales
-    #Variable del estado del programa
-    global main, fmainmenu, finicio, flogin, fregist, pstate
-
-    #Entry de login
-    global eluser, elpassword
-
-    #Entry de registro
-    global eruser, erpassword, ercpassword
-
-    #Condicional para volver a la pantalla principal
-    if pstate == 1:
-        #Variable del estado del programa en el valor de la pantalla principal
-        pstate = 0
-    
-        #Se reinician los entrys
-        eluser.delete(0, END)
-        elpassword.delete(0, END)
-        eruser.delete(0, END)
-        erpassword.delete(0, END)
-        ercpassword.delete(0, END)
-
-        #Se remueve la pantalla de funcionamiento
-        main.grid_remove()
-
-        #Se agrega la pantalla principal
-        fmainmenu.grid(row = 0, column = 0)
-
-    elif pstate == 2:
-        pstate = 1
-
 #Funcion para la pantalla de registro
 def regist():
     #Variables globales
@@ -102,8 +18,6 @@ def regist():
     #Se agregan las pestañas
     main.add(finicio, text = "Inicio")
     main.add(fregist, text = "Registrarse")
-    main.add(flogin, text = "Iniciar sesion")
-    main.add(fwelcome, text = "Menu principal")
 
     #Se selecciona la pestaña de registro
     main.select(fregist)
@@ -112,15 +26,16 @@ def regist():
     main.bind("<<NotebookTabChanged>>", lambda event: back())
 
     #Se remueve la pestaña de login
-    main.forget(flogin)
+    main.hide(flogin)
 
     #Se remueve la pestaña de menu principal
-    main.forget(fwelcome)
+    main.hide(fwelcome)
+    main.hide(fgestionplatos)
 
 #Funcion para la pantalla de login
 def login():
     #Variables globales
-    global main, fmainmenu, finicio, flogin ,fregist, pstate
+    global main, fmainmenu, finicio, flogin ,fregist, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos, pstate
 
     #Variable del estado del programa en el valor de 1era pantalla
     pstate = 1
@@ -134,8 +49,6 @@ def login():
     #Se agregan las pestañas
     main.add(finicio, text = "Inicio")
     main.add(flogin, text = "Iniciar sesion")
-    main.add(fregist, text = "Registrarse")
-    main.add(fwelcome, text = "Menu principal")
 
     #Se selecciona la pestaña de login
     main.select(flogin)
@@ -144,18 +57,28 @@ def login():
     main.bind("<<NotebookTabChanged>>", lambda event: back())
 
     #Se remueve la pestaña de registro
-    main.forget(fregist)
+    main.hide(fregist)
 
     #Se remueve la pestaña de menu principal
-    main.forget(fwelcome)
+    main.hide(fwelcome)
+    main.hide(fgestionplatos)
 
 #Funcion para la pantalla de menu principal
 def welcome():
     #Variables globales
-    global main, fwelcome, pstate, lwelcomemessage, usuario
+    global main, finicio, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos, pstate, lwelcomemessage, usuario
+
+    #Variable del estado del programa en el valor de 2da pantalla
+    pstate = 2
 
     #Se agrega la pestaña del menu principal
+    main.add(finicio, text = "Inicio")
     main.add(fwelcome, text = "Menu principal")
+
+    #Se remueven las pestañas
+    main.hide(fgestionplatos)
+    #main.forget(fgestionmesas)
+    #main.forget(fgestionpedidos)
 
     #Se selecciona la pestaña del menu principal
     main.select(fwelcome)
@@ -164,16 +87,30 @@ def welcome():
     main.bind("<<NotebookTabChanged>>", lambda event: back())
 
     #Se remueve la pestaña de login
-    main.forget(flogin)
+    main.hide(flogin)
 
+    #Se asigna el texto del mensaje de bienvenida
     lwelcomemessage.config(text = "Bienvenido " + usuario)
-
-    #Variable del estado del programa en el valor de 2da pantalla
-    pstate = 2
 
 #Funcion para la pantalla de gestion de platos
 def gestionplatos():
-    pass
+    #Variables globales
+    global main, finicio, fgestionplatos, pstate
+
+    #Variable del estado del programa en el valor de 3era pantalla
+    pstate = 4
+
+    #Se agrega la pestaña de gestion de platos
+    main.add(fgestionplatos, text = "Gestion de platos")
+
+    #Se selecciona la pestaña de gestion de platos
+    main.select(fgestionplatos)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se remueve la pestaña de inicio
+    main.hide(finicio)
 
 #Funcion para la pantalla de gestion de mesas
 def gestionmesas():
@@ -181,6 +118,15 @@ def gestionmesas():
 
 #Funcion para la pantalla de gestion de pedidos
 def gestionpedidos():
+    pass
+
+def agregarplato():
+    pass
+
+def eliminarplato():
+    pass
+
+def actualizarplato():
     pass
 
 #Funcion para iniciar sesion
@@ -202,10 +148,7 @@ def slogin():
             usuario = usuario.replace(usuario, eluser.get())
 
             #Se concatenan el usuario y la contraseña
-            tloginlist += eluser.get().lower()
-            tloginlist += ", " + elpassword.get()
-
-            print(tloginlist)
+            tloginlist += eluser.get().lower() + ", " + elpassword.get()
 
             #Se verifica si el usuario y la contraseña estan en la base de datos
             lloginlist.index(tloginlist)
@@ -249,8 +192,7 @@ def sregist():
             #Condicional para verificar si la contraseña contiene al menos 1 letra minuscula, 1 letra mayuscula, 1 numero, 1 caracter especial y solo 10 caracteres
             if erpassword.get().isalnum() == False and any(chr.islower() for chr in erpassword.get()) == True and any(chr.isupper() for chr in erpassword.get()) == True and any(chr.isdigit() for chr in erpassword.get()) == True and len(erpassword.get()) == 10:
                 #Se concatenan el usuario y la contraseña
-                tloginlist += eruser.get().lower()
-                tloginlist += ", " + erpassword.get()
+                tloginlist += eruser.get().lower() + ", " + erpassword.get()
 
                 #Condicional para verificar si el usuario ya existe
                 try:
@@ -265,7 +207,7 @@ def sregist():
                     #Se cifra la contraseña
                     lcpassword.append(hashlib.sha256(erpassword.get().encode()).hexdigest())
 
-                    #Se guarda la base de datos
+                    #Se guarda la base de datos de usuarios y contraseñas
                     txtloginlist = open(uplist, "w")
                     txtloginlist.write(str(lloginlist))
                     txtloginlist.close()
@@ -285,11 +227,57 @@ def sregist():
     else:
         messagebox.showerror("Error", "Las contraseñas no coinciden")
 
+#Funcion para volver a la pantalla anterior
+def back():
+    #Variables globales
+    #Variable del estado del programa
+    global main, fmainmenu, finicio, flogin, fregist, pstate
+
+    #Entry de login
+    global eluser, elpassword
+
+    #Entry de registro
+    global eruser, erpassword, ercpassword
+
+    #Condicional para volver a la pantalla principal
+    if pstate == 1:
+        #Variable del estado del programa en el valor de la pagina principal
+        pstate = 0
+    
+        #Se reinician los entrys
+        eluser.delete(0, END)
+        elpassword.delete(0, END)
+        eruser.delete(0, END)
+        erpassword.delete(0, END)
+        ercpassword.delete(0, END)
+
+        #Se remueve la pantalla de funcionamiento
+        main.hide(finicio)
+        main.hide(fgestionplatos)
+        main.grid_remove()
+
+        #Se agrega la pantalla principal
+        fmainmenu.grid(row = 0, column = 0)
+
+    #Condicional para volver a la pantalla del menu principal
+    elif pstate == 2:
+        #Variable del estado del programa en el valor de gestion de platos, mesas y pedidos
+        pstate = 1
+
+    elif pstate == 3:
+
+        welcome()
+        pstate = 1
+
+    elif pstate == 4:
+        #Variable del estado del programa en el valor de gestion de platos
+        pstate = 3
+
 #Funcion principal
 def run():
     #Variables globales
     global ssize, fsize, root, ico
-    global main, fmainmenu, finicio, flogin, fregist, fwelcome
+    global main, fmainmenu, finicio, flogin, fregist, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos
     global eluser, elpassword, usuario
     global eruser, erpassword, ercpassword
     global lwelcomemessage
@@ -491,6 +479,49 @@ def run():
     #Se crea el boton de cerrar sesion
     bwcsesion = Button(fwtext, text = "Cerrar sesion", command = back, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
+    #GESTION DE PLATOS
+    #Se crea la pantalla de gestion de platos
+    fgestionplatos = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de gestion de platos
+    ftlgpspace = Frame(fgestionplatos, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de gestion de platos
+    lgestionplatostitle = Label(fgestionplatos, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de gestion de platos
+    ligestionplatostitle = tkinter.Label(fgestionplatos, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de gestion de platos
+    ftcgpspace = Frame(fgestionplatos, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de gestion de platos
+    ftrgpspace = Frame(fgestionplatos, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de gestion de platos
+    fgpstext = Frame(fgestionplatos, bg = bgcolor)
+
+    #Se crea el label de gestion de platos
+    lgestionplatos = Label(fgpstext, text = "Gestion de platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el boton de agregar plato
+    bgpagregarplato = Button(fgpstext, text = "Agregar plato", command = agregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de eliminar plato
+    bgpeliminarplato = Button(fgpstext, text = "Eliminar plato", command = eliminarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de actualizar plato
+    bgpactualizarplato = Button(fgpstext, text = "Actualizar plato", command = actualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se agregan las pestañas
+    main.add(finicio, text = "Inicio")
+    main.add(flogin, text = "Iniciar sesion")
+    main.add(fregist, text = "Registrarse")
+    main.add(fwelcome, text = "Menu principal")
+    main.add(fgestionplatos, text = "Gestion de platos")
+    #main.add(fgestionmesas, text = "Gestion de mesas")
+    #main.add(fgestionpedidos, text = "Gestion de pedidos")
+
     #Posicionamiento de Frames
     #Posicionamiento de la pantalla principal
     fmainmenu.grid(row = 0, column = 0)
@@ -650,6 +681,37 @@ def run():
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de menu principal
     ftrwspace.grid(row = 0, column = 4)
+
+    #Posicionamiento de la pantalla de gestion de platos
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de gestion de platos
+    ftlgpspace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de gestion de platos
+    lgestionplatostitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de gestion de platos
+    ligestionplatostitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de gestion de platos
+    ftcgpspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de gestion de platos
+    fgpstext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de gestion de platos
+    lgestionplatos.grid(row = 0, column = 0)
+
+    #Posicionamiento del boton de agregar plato
+    bgpagregarplato.grid(row = 1, column = 0)
+
+    #Posicionamiento del boton de eliminar plato
+    bgpeliminarplato.grid(row = 2, column = 0)
+
+    #Posicionamiento del boton de actualizar plato
+    bgpactualizarplato.grid(row = 3, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de gestion de platos
+    ftrgpspace.grid(row = 0, column = 4)
 
     #Bucle de la ventana
     root.mainloop()
