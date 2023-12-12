@@ -15,6 +15,11 @@ import sv_ttk
 #2 = Bienvenido
 pstate = 0
 
+#Variables de ruta de archivos
+#Variable de ruta de la base de datos de usuarios y contraseñas
+uplist = "txt/registro_inicio.txt"
+cplist = "txt/password.txt"
+
 #Variables de fuente y color
 ftitle = "MS Sans Serif"
 fctitle = "#505050"
@@ -30,18 +35,18 @@ logoar = 567 / 487
 bwregist = 37 / 1366
 
 #Descifrar lista de usuarios y contraseñas
-txtloginlist = open("txt/tloginlist.txt", "r")
+txtloginlist = open(uplist, "r")
 loginlist = txtloginlist.read()
 txtloginlist.close()
-loginlist = loginlist.replace(" ", "")
-loginlist = loginlist.replace("'", "")
-loginlist = loginlist.replace("],[", "/")
-loginlist = loginlist.replace("]]", "")
-loginlist = loginlist.replace("[[", "")
-lloginlist = loginlist.split("/")
+loginlist = loginlist.replace("']", "").replace("['", "")
+lloginlist = loginlist.split("', '")
 
-for i in range(len(lloginlist)):
-    lloginlist[i] = lloginlist[i].split(",")
+#Descifrar lista de contraseñas cifradas
+txtcpassword = open(cplist, "r")
+cpassword = txtcpassword.read()
+txtcpassword.close()
+cpassword = cpassword.replace("']", "").replace("['", "")
+lcpassword = cpassword.split("', '")
 
 #Base de datos de correos
 emaildb = ["@correounivalle.edu.co","@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com", "@live.com", "@msn.com", "@aol.com", "@yandex.com", "@protonmail.com", "@zoho.com", "@gmx.com", "@mail.com", "@yopmail.com", "@tutanota.com", "@mail.ru", "@gmx.us", "@gmx.de", "@gmx.fr", "@gmx.at", "@gmx.ch", "@gmx.net", "@gmx.co.uk", "@gmx.com.mx", "@gmx.es", "@gmx.eu", "@gmx.it", "@gmx.com.br", "@gmx.com.ar", "@gmx.com.co", "@gmx.com.ve", "@gmx.com.pe", "@gmx.com.ec", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.pa", "@gmx.com.do", "@gmx.com.gt", "@gmx.com.sv", "@gmx.com.hn", "@gmx.com.ni", "@gmx.com.cr", "@gmx.com.cu", "@gmx.com.pr", "@gmx.com.jm", "@gmx.com.bb", "@gmx.com.ag", "@gmx.com.dm", "@gmx.com.vc", "@gmx.com.lc", "@gmx.com.gy", "@gmx.com.sr", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.ar", "@gmx.com.co", "@gmx.com.ve", "@gmx.com.pe", "@gmx.com.ec", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy", "@gmx.com.pa", "@gmx.com.do", "@gmx.com.gt", "@gmx.com.sv", "@gmx.com.hn", "@gmx.com.ni", "@gmx.com.cr", "@gmx.com.cu", "@gmx.com.pr", "@gmx.com.jm", "@gmx.com.bb", "@gmx.com.ag", "@gmx.com.dm", "@gmx.com.vc", "@gmx.com.lc", "@gmx.com.gy", "@gmx.com.sr", "@gmx.com.bo", "@gmx.com.py", "@gmx.com.uy"]
@@ -166,13 +171,25 @@ def welcome():
     #Variable del estado del programa en el valor de 2da pantalla
     pstate = 2
 
+#Funcion para la pantalla de gestion de platos
+def gestionplatos():
+    pass
+
+#Funcion para la pantalla de gestion de mesas
+def gestionmesas():
+    pass
+
+#Funcion para la pantalla de gestion de pedidos
+def gestionpedidos():
+    pass
+
 #Funcion para iniciar sesion
 def slogin():
     #Variables globales
     global main, finicio, flogin, pstate, lloginlist, eluser, elpassword, usuario
 
     #Lista temporal de login
-    tloginlist = []
+    tloginlist = ""
 
     #Condicional para verificar si los campos estan vacios
     if elpassword.get() == "" or eluser.get() == "":
@@ -182,11 +199,13 @@ def slogin():
         #Condicional para verificar si el usuario y la contraseña son correctos
         try:
             #Se obtiene el usuario que inicio sesion
-            usuario = usuario.replace(".", eluser.get())
+            usuario = usuario.replace(usuario, eluser.get())
 
-            #Se cifra el usuario y la contraseña
-            tloginlist.append(hashlib.sha256(eluser.get().lower().encode()).hexdigest())
-            tloginlist.append(hashlib.sha256(elpassword.get().encode()).hexdigest())
+            #Se concatenan el usuario y la contraseña
+            tloginlist += eluser.get().lower()
+            tloginlist += ", " + elpassword.get()
+
+            print(tloginlist)
 
             #Se verifica si el usuario y la contraseña estan en la base de datos
             lloginlist.index(tloginlist)
@@ -203,10 +222,10 @@ def slogin():
 #Funcion para registrar usuario
 def sregist():
     #Variables globales
-    global main, finicio, fregist, pstate, lloginlist, eruser, erpassword, ercpassword
+    global main, finicio, fregist, pstate, lloginlist, lcpassword, eruser, erpassword, ercpassword
 
     #Lista temporal de login
-    tloginlist = []
+    tloginlist = ""
 
     #Condicional para verificar si los campos estan vacios
     if erpassword.get() == "" or eruser.get() == "" or ercpassword.get() == "":
@@ -227,27 +246,41 @@ def sregist():
 
         #Excepcion para cuando el usuario y la contraseña no tienen espacios
         except ValueError:
-            #Se cifra el usuario y la contraseña
-            tloginlist.append(hashlib.sha256(eruser.get().lower().encode()).hexdigest())
-            tloginlist.append(hashlib.sha256(erpassword.get().encode()).hexdigest())
+            #Condicional para verificar si la contraseña contiene al menos 1 letra minuscula, 1 letra mayuscula, 1 numero, 1 caracter especial y solo 10 caracteres
+            if erpassword.get().isalnum() == False and any(chr.islower() for chr in erpassword.get()) == True and any(chr.isupper() for chr in erpassword.get()) == True and any(chr.isdigit() for chr in erpassword.get()) == True and len(erpassword.get()) == 10:
+                #Se concatenan el usuario y la contraseña
+                tloginlist += eruser.get().lower()
+                tloginlist += ", " + erpassword.get()
 
-            #Condicional para verificar si el usuario ya existe
-            try:
-                lloginlist.index(tloginlist)
-                messagebox.showerror("Error", "El usuario ya existe")
+                #Condicional para verificar si el usuario ya existe
+                try:
+                    lloginlist.index(tloginlist)
+                    messagebox.showerror("Error", "El usuario ya existe")
 
-            #Excepcion para cuando el usuario no existe
-            except ValueError:
-                #Se agrega el usuario y la contraseña a la base de datos
-                lloginlist.append(tloginlist)
+                #Excepcion para cuando el usuario no existe
+                except ValueError:
+                    #Se agrega el usuario y la contraseña a la base de datos
+                    lloginlist.append(tloginlist)
 
-                #Se guarda la base de datos
-                txtloginlist = open("txt/tloginlist.txt", "w")
-                txtloginlist.write(str(lloginlist))
-                txtloginlist.close()
+                    #Se cifra la contraseña
+                    lcpassword.append(hashlib.sha256(erpassword.get().encode()).hexdigest())
 
-                messagebox.showinfo("Registrado", "Usuario registrado con exito")
-                back()
+                    #Se guarda la base de datos
+                    txtloginlist = open(uplist, "w")
+                    txtloginlist.write(str(lloginlist))
+                    txtloginlist.close()
+
+                    #Se guarda la base de datos de contraseñas
+                    txtcpassword = open(cplist, "w")
+                    txtcpassword.write(str(lcpassword))
+                    txtcpassword.close()
+
+                    messagebox.showinfo("Registrado", "Usuario registrado con exito")
+                    back()
+
+            #Excepcion para cuando la contraseña no contiene al menos 1 letra minuscula, 1 letra mayuscula, 1 numero, 1 caracter especial y solo 10 caracteres
+            else:
+                messagebox.showerror("Error", "La contraseña debe tener al menos 1 letra minuscula, 1 letra mayuscula, 1 numero, 1 caracter especial y solo 10 caracteres")
 
     else:
         messagebox.showerror("Error", "Las contraseñas no coinciden")
@@ -255,7 +288,7 @@ def sregist():
 #Funcion principal
 def run():
     #Variables globales
-    global ssize, fsize, root, ico, photo
+    global ssize, fsize, root, ico
     global main, fmainmenu, finicio, flogin, fregist, fwelcome
     global eluser, elpassword, usuario
     global eruser, erpassword, ercpassword
@@ -285,8 +318,7 @@ def run():
 
     #Se asigna el icono
     ico = Image.open("img/logo.png")
-    photo = ImageTk.PhotoImage(ico)
-    root.wm_iconphoto(False, photo)
+    root.wm_iconphoto(False, ImageTk.PhotoImage(ico))
 
     #Se crea la pantalla de funcionamiento
     main = ttk.Notebook(root)
@@ -302,8 +334,8 @@ def run():
     lmaintitle = Label(fmainmenu, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
 
     #Se crea el logo de la pantalla principal
-    imaintitle = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.1), int(ssize[0] * 0.1 * logoar))))
-    limaintitle = tkinter.Label(fmainmenu, image = imaintitle, bg = bgcolor)
+    logo = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.1), int(ssize[0] * 0.1 * logoar))))
+    limaintitle = tkinter.Label(fmainmenu, image = logo, bg = bgcolor)
     
     #Se crea el frame de espacio medio izquierdo de la pantalla principal
     fmlmspace = Frame(fmainmenu, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
@@ -341,8 +373,7 @@ def run():
     llogintitle = Label(flogin, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
 
     #Se crea el logo de la pantalla de login
-    ilogintitle = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.1), int(ssize[0] * 0.1 * logoar))))
-    lilogintitle = tkinter.Label(flogin, image = ilogintitle, bg = bgcolor)
+    lilogintitle = tkinter.Label(flogin, image = logo, bg = bgcolor)
 
     #Se crea el frame de ubicacion de los elementos de la pantalla de login
     fltext = Frame(flogin, bg = bgcolor)
@@ -363,13 +394,16 @@ def run():
     ltlogin = Label(fltext, text = " ", font = (ftitle, int(fsize / 5), "bold"), bg = bgcolor)
 
     #Se crea el boton de iniciar sesion de la pantalla de login
-    bslogin = Button(flogin, text = "Iniciar sesion", command = slogin, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
+    bslogin = Button(fltext, text = "Iniciar sesion", command = slogin, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
 
     #Se crea el frame de espacio superior derecho de la pantalla de login
     ftrlspace = Frame(flogin, width = ssize[0] * 0.39, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el frame de espacio central izquierdo de la pantalla de login
     fcllspace = Frame(flogin, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio inferior izquierdo de la pantalla de login
+    fbllspace = Frame(flogin, width = ssize[0] * 0.05, height = ssize[0] * 0.08, bg = bgcolor)
 
     #REGISTRO  
     #Se crea la pantalla de registro
@@ -382,8 +416,7 @@ def run():
     lregisttitle = Label(fregist, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
 
     #Se crea el logo de la pantalla de registro
-    iregisttitle = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.1), int(ssize[0] * 0.1 * logoar))))
-    liregisttitle = tkinter.Label(fregist, image = ilogintitle, bg = bgcolor)
+    liregisttitle = tkinter.Label(fregist, image = logo, bg = bgcolor)
 
     #Se crea el frame de ubicacion de los elementos de la pantalla de registro
     frtext = Frame(fregist, bg = bgcolor)
@@ -410,7 +443,7 @@ def run():
     ltregist = Label(frtext, text = " ", font = (ftitle, int(fsize / 5), "bold"), bg = bgcolor)
 
     #Se crea el boton de registrarse de la pantalla de registro
-    bsregist = Button(fregist, text = "Registrarse", command = sregist, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
+    bsregist = Button(frtext, text = "Registrarse", command = sregist, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
 
     #Se crea el frame de espacio superior derecho de la pantalla de registro
     ftrrspace = Frame(fregist, width = ssize[0] * 0.39, height = ssize[0] * 0.05, bg = bgcolor)
@@ -418,31 +451,45 @@ def run():
     #Se crea el frame de espacio central izquierdo de la pantalla de registro
     fclrspace = Frame(fregist, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
 
+    #Se crea el frame de espacio inferior izquierdo de la pantalla de registro
+    fblrspace = Frame(fregist, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
+
     #BIENVENIDO
     #Se crea la pantalla de menu principal
     fwelcome = Frame(main, bg = bgcolor)
 
     #Se crea el frame de espacio superior izquierdo de la pantalla de menu principal
-    ftlwspace = Frame(fwelcome, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
+    ftlwspace = Frame(fwelcome, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el titulo de la pantalla de menu principal
     lwelcometitle = Label(fwelcome, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
 
     #Se crea el logo de la pantalla de menu principal
-    iwelcometitle = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.1), int(ssize[0] * 0.1 * logoar))))
-    liwelcometitle = tkinter.Label(fwelcome, image = ilogintitle, bg = bgcolor)
+    liwelcometitle = tkinter.Label(fwelcome, image = logo, bg = bgcolor)
 
     #Se crea el frame de espacio superior central de la pantalla de menu principal
-    ftcwspace = Frame(fwelcome, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
+    ftcwspace = Frame(fwelcome, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el frame de espacio superior derecho de la pantalla de menu principal
-    ftrwspace = Frame(fwelcome, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
+    ftrwspace = Frame(fwelcome, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el frame de ubicacion de los elementos de la pantalla de menu principal
     fwtext = Frame(fwelcome, bg = bgcolor)
 
     #Se crea el label de mensaje de bienvenida de la pantalla de menu principal
     lwelcomemessage = Label(fwtext, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el boton de gestion de platos
+    bwgestionplatos = Button(fwtext, text = "Gestion de platos", command = gestionplatos, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de gestion de mesas
+    bwgestionmesas = Button(fwtext, text = "Gestion de mesas", command = gestionmesas, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    
+    #Se crea el boton de gestion de pedidos
+    bwgestionpedidos = Button(fwtext, text = "Gestion de pedidos", command = gestionpedidos, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de cerrar sesion
+    bwcsesion = Button(fwtext, text = "Cerrar sesion", command = back, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
     #Posicionamiento de Frames
     #Posicionamiento de la pantalla principal
@@ -491,6 +538,9 @@ def run():
     #Posicionamiento del frame de espacio central izquierdo de la pantalla de login
     fcllspace.grid(row = 3, column = 0)
 
+    #Posicionamiento del frame de espacio inferior izquierdo de la pantalla de login
+    fbllspace.grid(row = 5, column = 0)
+
     #Posicionamiento del titulo de la pantalla de login
     llogintitle.grid(row = 1, column = 1)
 
@@ -501,22 +551,22 @@ def run():
     fltext.grid(row = 4, column = 1)
 
     #Posicionamiento del label de usuario de la pantalla de login
-    lluser.grid(row = 4, column = 1)
+    lluser.grid(row = 0, column = 0)
 
     #Posicionamiento del entry de usuario de la pantalla de login
-    eluser.grid(row = 5, column = 1)
+    eluser.grid(row = 1, column = 0)
 
     #Posicionamiento del label de contraseña de la pantalla de login
-    llpassword.grid(row = 6, column = 1)
+    llpassword.grid(row = 2, column = 0)
 
     #Posicionamiento del entry de contraseña de la pantalla de login
-    elpassword.grid(row = 7, column = 1)
+    elpassword.grid(row = 3, column = 0)
 
     #Posicionamiento del label de espacio vacio de la pantalla de login
-    ltlogin.grid(row = 8, column = 1)
+    ltlogin.grid(row = 4, column = 0)
 
     #Posicionamiento del boton de iniciar sesion de la pantalla de login
-    bslogin.grid(row = 9, column = 1)
+    bslogin.grid(row = 5, column = 0)
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de login
     ftrlspace.grid(row = 0, column = 2)
@@ -528,6 +578,9 @@ def run():
     #Posicionamiento del frame de espacio central izquierdo de la pantalla de registro
     fclrspace.grid(row = 3, column = 0)
 
+    #Posicionamiento del frame de espacio inferior izquierdo de la pantalla de registro
+    fblrspace.grid(row = 5, column = 0)
+
     #Posicionamiento del titulo de la pantalla de registro
     lregisttitle.grid(row = 1, column = 1)
 
@@ -538,28 +591,28 @@ def run():
     frtext.grid(row = 4, column = 1)
 
     #Posicionamiento del label de usuario de la pantalla de registro
-    lruser.grid(row = 4, column = 1)
+    lruser.grid(row = 0, column = 0)
 
     #Posicionamiento del entry de usuario de la pantalla de registro
-    eruser.grid(row = 5, column = 1)
+    eruser.grid(row = 1, column = 0)
 
     #Posicionamiento del label de contraseña de la pantalla de registro
-    lrpassword.grid(row = 6, column = 1)
+    lrpassword.grid(row = 2, column = 0)
 
     #Posicionamiento del entry de contraseña de la pantalla de registro
-    erpassword.grid(row = 7, column = 1)
+    erpassword.grid(row = 3, column = 0)
 
     #Posicionamiento del label de confirmar contraseña de la pantalla de registro
-    lrcpassword.grid(row = 8, column = 1)
+    lrcpassword.grid(row = 4, column = 0)
 
     #Posicionamiento del entry de confirmar contraseña de la pantalla de registro
-    ercpassword.grid(row = 9, column = 1)
+    ercpassword.grid(row = 5, column = 0)
 
     #Posicionamiento del label de espacio vacio de la pantalla de registro
-    ltregist.grid(row = 10, column = 1)
+    ltregist.grid(row = 6, column = 0)
 
     #Posicionamiento del boton de registrarse de la pantalla de registro
-    bsregist.grid(row = 11, column = 1)
+    bsregist.grid(row = 7, column = 0)
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de registro
     ftrrspace.grid(row = 0, column = 2)
@@ -574,14 +627,26 @@ def run():
     #Posicionamiento del logo de la pantalla de menu principal
     liwelcometitle.grid(row = 2, column = 1)
 
-    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de menu principal
-    fwtext.grid(row = 4, column = 1)
-
-    #Posicionamiento del label de mensaje de bienvenida de la pantalla de menu principal
-    lwelcomemessage.grid(row = 4, column = 1)
-
     #Posicionamiento del frame de espacio superior central de la pantalla de menu principal
     ftcwspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de menu principal
+    fwtext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de mensaje de bienvenida de la pantalla de menu principal
+    lwelcomemessage.grid(row = 0, column = 0)
+
+    #Posicionamiento del boton de gestion de platos
+    bwgestionplatos.grid(row = 1, column = 0)
+
+    #Posicionamiento del boton de gestion de mesas
+    bwgestionmesas.grid(row = 2, column = 0)
+
+    #Posicionamiento del boton de gestion de pedidos
+    bwgestionpedidos.grid(row = 3, column = 0)
+
+    #Posicionamiento del boton de cerrar sesion
+    bwcsesion.grid(row = 4, column = 0)
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de menu principal
     ftrwspace.grid(row = 0, column = 4)
