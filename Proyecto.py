@@ -139,6 +139,7 @@ def eliminaractualizarplato():
     #Variable del estado del programa en el valor de 4era pantalla
     pstate = 5
 
+    #Se 
     snplatos = ["Nombre"]
     spplatos = ["Precio"]
     sdesplatos = ["Descripcion"]
@@ -152,6 +153,7 @@ def eliminaractualizarplato():
 
     #Se asigna la funcion de volver a la pantalla anterior
     main.bind("<<NotebookTabChanged>>", lambda event: back())
+    lbnplatos.bind("<ButtonRelease-1>", seleliminarplato)
 
     #Se muestra la pestaña de menu principal
     main.hide(fwelcome)
@@ -335,7 +337,9 @@ def sagregarplato():
             messagebox.showinfo("Agregado", "Plato agregado con exito")
 
 def seliminarplato():
-    pass
+    global lbnplatos
+
+    #lbnplatos.curselection
 
 def sactualizarplato():
     pass
