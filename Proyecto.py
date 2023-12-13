@@ -4,7 +4,7 @@ from configfile import *
 #Funcion para la pantalla de registro
 def regist():
     #Variables globales
-    global main, fmainmenu, finicio, flogin, fregist, fwelcome, pstate
+    global pstate
 
     #Variable del estado del programa en el valor de 1era pantalla
     pstate = 1
@@ -35,7 +35,7 @@ def regist():
 #Funcion para la pantalla de login
 def login():
     #Variables globales
-    global main, fmainmenu, finicio, flogin ,fregist, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos, pstate
+    global pstate
 
     #Variable del estado del programa en el valor de 1era pantalla
     pstate = 1
@@ -66,7 +66,7 @@ def login():
 #Funcion para la pantalla de menu principal
 def welcome():
     #Variables globales
-    global main, finicio, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos, pstate, lwelcomemessage, usuario
+    global pstate, usuario
 
     #Variable del estado del programa en el valor de 2da pantalla
     pstate = 2
@@ -95,12 +95,13 @@ def welcome():
 #Funcion para la pantalla de gestion de platos
 def gestionplatos():
     #Variables globales
-    global main, finicio, fgestionplatos, pstate
+    global pstate
 
     #Variable del estado del programa en el valor de 3era pantalla
     pstate = 4
 
     #Se agrega la pestaña de gestion de platos
+    main.add(fwelcome, text = "Menu principal")
     main.add(fgestionplatos, text = "Gestion de platos")
 
     #Se selecciona la pestaña de gestion de platos
@@ -111,6 +112,84 @@ def gestionplatos():
 
     #Se remueve la pestaña de inicio
     main.hide(finicio)
+    main.hide(fagregarplato)
+    main.hide(feliminaractualizarplato)
+
+def agregarplato():
+    global pstate
+
+    #Variable del estado del programa en el valor de 4era pantalla
+    pstate = 5
+
+    #Se agrega la pestaña de agregar plato
+    main.add(fagregarplato, text = "Agregar plato")
+
+    #Se selecciona la pestaña de agregar plato
+    main.select(fagregarplato)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+
+def eliminaractualizarplato():
+    global pstate
+
+    #Variable del estado del programa en el valor de 4era pantalla
+    pstate = 5
+
+    snplatos = ["Nombre"]
+    spplatos = ["Precio"]
+    sdesplatos = ["Descripcion"]
+    sdplatos = ["Disponibilidad"]
+
+    #Se agrega la pestaña de agregar plato
+    main.add(feliminaractualizarplato, text = "Eliminar o actualizar plato")
+
+    #Se selecciona la pestaña de agregar plato
+    main.select(feliminaractualizarplato)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+
+    #Se organiza la lista de nombres de platos
+    for i in range(len(lplatos)):
+        snplatos.append(lplatos[i][0].capitalize())
+
+    #Se organiza la lista de precios de platos
+    for i in range(len(lplatos)):
+        spplatos.append(lplatos[i][1])
+
+    #Se organiza la lista de descripciones de platos
+    for i in range(len(lplatos)):
+        sdesplatos.append(lplatos[i][2])
+
+    #Se organiza la lista de disponibilidades de platos
+    for i in range(len(lplatos)):
+        sdplatos.append(lplatos[i][3])
+
+    #Se asigna el listado de nombres de platos
+    lbnplatos.delete(0, END)
+    lbnplatos.insert(0, *snplatos)
+
+    #Se asigna el listado de precios de platos
+    lbpplatos.delete(0, END)
+    lbpplatos.insert(0, *spplatos)
+
+    #Se asigna el listado de descripciones de platos
+    lbdesplatos.delete(0, END)
+    lbdesplatos.insert(0, *sdesplatos)
+
+    #Se asigna el listado de disponibilidades de platos
+    lbdplatos.delete(0, END)
+    lbdplatos.insert(0, *sdplatos)
+
+def actualizarplato():
+    pass
 
 #Funcion para la pantalla de gestion de mesas
 def gestionmesas():
@@ -120,19 +199,9 @@ def gestionmesas():
 def gestionpedidos():
     pass
 
-def agregarplato():
-    pass
-
-def eliminarplato():
-    pass
-
-def actualizarplato():
-    pass
-
 #Funcion para iniciar sesion
 def slogin():
-    #Variables globales
-    global main, finicio, flogin, pstate, lloginlist, eluser, elpassword, usuario
+    global usuario
 
     #Lista temporal de login
     tloginlist = ""
@@ -165,7 +234,7 @@ def slogin():
 #Funcion para registrar usuario
 def sregist():
     #Variables globales
-    global main, finicio, fregist, pstate, lloginlist, lcpassword, eruser, erpassword, ercpassword
+    global lloginlist, lcpassword
 
     #Lista temporal de login
     tloginlist = ""
@@ -227,17 +296,55 @@ def sregist():
     else:
         messagebox.showerror("Error", "Las contraseñas no coinciden")
 
+def sagregarplato():
+    global lplatos
+
+    tlplatos = []
+    #Condicional para verificar si los campos estan vacios
+    if enombreplato.get() == "" or eprecioplato.get() == "" or edescripcionplato.get() == "" or edisponibilidadplato.get() == "":
+        messagebox.showerror("Error", "No se pueden dejar campos vacios")
+
+    elif edisponibilidadplato.get().lower() != "si" and edisponibilidadplato.get().lower() != "no":
+        messagebox.showerror("Error", "La disponibilidad del plato solo puede ser si o no")
+
+    elif eprecioplato.get().isdigit() == False:
+        messagebox.showerror("Error", "El precio del plato solo puede ser un numero y no puede ser negativo")
+
+    else:
+        #Condicional para verificar si el plato ya existe
+        try:
+            for i in range(len(lplatos)):
+                lplatos[i].index(enombreplato.get().lower())
+            messagebox.showerror("Error", "El plato ya existe")
+
+        #Excepcion para cuando el plato no existe
+        except ValueError:
+            #Se agrega el plato a la base de datos
+            tlplatos.append(enombreplato.get().lower())
+            tlplatos.append(eprecioplato.get())
+            tlplatos.append(edescripcionplato.get())
+            tlplatos.append(edisponibilidadplato.get().lower())
+
+            lplatos.append(tlplatos)
+
+            #Se guarda la base de datos de platos
+            txtplatos = open(plist, "w")
+            txtplatos.write(str(lplatos))
+            txtplatos.close()
+
+            messagebox.showinfo("Agregado", "Plato agregado con exito")
+
+def seliminarplato():
+    pass
+
+def sactualizarplato():
+    pass
+
 #Funcion para volver a la pantalla anterior
 def back():
     #Variables globales
     #Variable del estado del programa
-    global main, fmainmenu, finicio, flogin, fregist, pstate
-
-    #Entry de login
-    global eluser, elpassword
-
-    #Entry de registro
-    global eruser, erpassword, ercpassword
+    global pstate
 
     #Condicional para volver a la pantalla principal
     if pstate == 1:
@@ -254,6 +361,8 @@ def back():
         #Se remueve la pantalla de funcionamiento
         main.hide(finicio)
         main.hide(fgestionplatos)
+        main.hide(fagregarplato)
+        main.hide(feliminaractualizarplato)
         main.grid_remove()
 
         #Se agrega la pantalla principal
@@ -271,47 +380,16 @@ def back():
 
     elif pstate == 4:
         #Variable del estado del programa en el valor de gestion de platos
+        gestionplatos()
         pstate = 3
 
-#Funcion principal
-def run():
-    #Variables globales
-    global ssize, fsize, root, ico
-    global main, fmainmenu, finicio, flogin, fregist, fwelcome, fgestionplatos, fgestionmesas, fgestionpedidos
-    global eluser, elpassword, usuario
-    global eruser, erpassword, ercpassword
-    global lwelcomemessage
+    elif pstate == 5:
+        pstate = 4
 
-    #Se crea la ventana
-    root = tkinter.Tk()
+#Funcion para definir la pantalla principal
+def pmainmenu():
+    global fmainmenu, ftlmspace, fmlmspace, fblmspace, lmaintitle, logo, limaintitle, lmaindesc, ftcmspace, bregist, blogin, ftrmspace
     
-    #Se crea el tema
-    sv_ttk.set_theme("light")
-
-    #Se obtiene el tamaño de la pantalla
-    ssize = (root.winfo_screenwidth(), root.winfo_screenheight())
-
-    #Se asignan los tamaños de fuente
-    fsize = int((35 / 1366) * ssize[0])
-
-    #Se asigna el tamaño de 1 tercio de la pantalla
-    trissize = int((455 / 1366) * ssize[0])
-
-    #Se maximiza la ventana
-    root.state("zoomed")
-
-    #Se asigna el titulo y el color de fondo
-    root.title(mrtitle)
-    root.config(bg = bgcolor)
-
-    #Se asigna el icono
-    ico = Image.open("img/logo.png")
-    root.wm_iconphoto(False, ImageTk.PhotoImage(ico))
-
-    #Se crea la pantalla de funcionamiento
-    main = ttk.Notebook(root)
-
-    #MENU PRINCIPAL
     #Se crea la pantalla principal
     fmainmenu = Frame(root, bg = bgcolor)
 
@@ -346,11 +424,10 @@ def run():
     #Se crea el frame de espacio inferior izquierdo de la pantalla principal
     fblmspace = Frame(fmainmenu, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
 
-    #INICIO
-    #Se crea la pantalla de inicio
-    finicio = Frame(main, bg = bgcolor)
+#Funcion para definir la pantalla de login
+def plogin():
+    global flogin, ftllspace, fcllspace, fbllspace, ftrlspace, llogintitle, lilogintitle, fltext, eluser, elpassword, lluser, llpassword, ltlogin, bslogin
 
-    #LOGIN
     #Se crea la pantalla de login
     flogin = Frame(main, bg = bgcolor)
 
@@ -393,7 +470,10 @@ def run():
     #Se crea el frame de espacio inferior izquierdo de la pantalla de login
     fbllspace = Frame(flogin, width = ssize[0] * 0.05, height = ssize[0] * 0.08, bg = bgcolor)
 
-    #REGISTRO  
+#Funcion para definir la pantalla de registro
+def pregist():
+    global fregist, ftlrspace, fblrspace, fclrspace, ftrrspace, lregisttitle, liregisttitle, frtext, eruser, erpassword, ercpassword, lruser, lrpassword, lrcpassword, ltregist, bsregist
+
     #Se crea la pantalla de registro
     fregist = Frame(main, bg = bgcolor)
 
@@ -442,7 +522,10 @@ def run():
     #Se crea el frame de espacio inferior izquierdo de la pantalla de registro
     fblrspace = Frame(fregist, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
 
-    #BIENVENIDO
+#Funcion para definir la pantalla de menu principal
+def pwelcome():
+    global fwelcome, ftlwspace, ftcwspace, ftrwspace, lwelcometitle, liwelcometitle, fwtext, lwelcomemessage, bwgestionplatos, bwgestionmesas, bwgestionpedidos, bwcsesion
+
     #Se crea la pantalla de menu principal
     fwelcome = Frame(main, bg = bgcolor)
 
@@ -479,7 +562,10 @@ def run():
     #Se crea el boton de cerrar sesion
     bwcsesion = Button(fwtext, text = "Cerrar sesion", command = back, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
-    #GESTION DE PLATOS
+#Funcion para definir la pantalla de gestion de platos
+def pgestionplatos():
+    global fgestionplatos, ftlgpspace, ftcgpspace, ftrgpspace, lgestionplatostitle, ligestionplatostitle, fgptext, lgestionplatos, bgpagregarplato, bgpeliminaractualizarplato
+
     #Se crea la pantalla de gestion de platos
     fgestionplatos = Frame(main, bg = bgcolor)
 
@@ -499,30 +585,111 @@ def run():
     ftrgpspace = Frame(fgestionplatos, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el frame de ubicacion de los elementos de la pantalla de gestion de platos
-    fgpstext = Frame(fgestionplatos, bg = bgcolor)
+    fgptext = Frame(fgestionplatos, bg = bgcolor)
 
     #Se crea el label de gestion de platos
-    lgestionplatos = Label(fgpstext, text = "Gestion de platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+    lgestionplatos = Label(fgptext, text = "Gestion de platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea el boton de agregar plato
-    bgpagregarplato = Button(fgpstext, text = "Agregar plato", command = agregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bgpagregarplato = Button(fgptext, text = "Agregar plato", command = agregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
     #Se crea el boton de eliminar plato
-    bgpeliminarplato = Button(fgpstext, text = "Eliminar plato", command = eliminarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bgpeliminaractualizarplato = Button(fgptext, text = "Eliminar o actualizar plato", command = eliminaractualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+def pagregarplato():
+    global fagregarplato, ftlapspace, lagregarplatotitle, liagregarplatotitle, ftcapspace, ftrapspace, faptext, lagregarplato, lnombreplato, enombreplato, lprecioplato, eprecioplato, ldescripcionplato, edescripcionplato, ldisponibilidadplato, edisponibilidadplato, bagregarplato
+
+    #Se crea la pantalla de agregar plato
+    fagregarplato = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de agregar plato
+    ftlapspace = Frame(fagregarplato, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de agregar plato
+    lagregarplatotitle = Label(fagregarplato, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de agregar plato
+    liagregarplatotitle = tkinter.Label(fagregarplato, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de agregar plato
+    ftcapspace = Frame(fagregarplato, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de agregar plato
+    ftrapspace = Frame(fagregarplato, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de agregar plato
+    faptext = Frame(fagregarplato, bg = bgcolor)
+
+    #Se crea el label de agregar plato
+    lagregarplato = Label(faptext, text = "Agregar plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label de nombre de plato
+    lnombreplato = Label(faptext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de nombre de plato
+    enombreplato = Entry(faptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea label de precio de plato
+    lprecioplato = Label(faptext, text = "Precio del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de precio de plato
+    eprecioplato = Entry(faptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea label de descripcion de plato
+    ldescripcionplato = Label(faptext, text = "Descripcion del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de descripcion de plato
+    edescripcionplato = Entry(faptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea label de disponibilidad de plato
+    ldisponibilidadplato = Label(faptext, text = "Disponibilidad del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de disponibilidad de plato
+    edisponibilidadplato = Entry(faptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el boton de agregar plato
+    bagregarplato = Button(faptext, text = "Agregar plato", command = sagregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+#Funcion para definir la pantalla de eliminar o actualizar plato
+def peliminaractualizarplato():
+    global logosmall, feliminaractualizarplato, lieliminaractualizarplatotitle, leliminaractualizarplatotitle, featext, leliminaractualizarplato, beliminarplato, bactualizarplato, sbplatos, lbnplatos, lbpplatos, lbdesplatos, lbdplatos
+
+    #Se crea la pantalla de eliminar o actualizar plato
+    feliminaractualizarplato = Frame(main, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de eliminar o actualizar plato
+    logosmall = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.05), int(ssize[0] * 0.05 * logoar))))
+    lieliminaractualizarplatotitle = tkinter.Label(feliminaractualizarplato, image = logosmall, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de eliminar o actualizar plato
+    leliminaractualizarplatotitle = Label(feliminaractualizarplato, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el boton de eliminar plato
+    beliminarplato = Button(feliminaractualizarplato, bg = "red", text = "Eliminar plato", command = seliminarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
     #Se crea el boton de actualizar plato
-    bgpactualizarplato = Button(fgpstext, text = "Actualizar plato", command = actualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bactualizarplato = Button(feliminaractualizarplato, text = "Actualizar plato", command = sactualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
-    #Se agregan las pestañas
-    main.add(finicio, text = "Inicio")
-    main.add(flogin, text = "Iniciar sesion")
-    main.add(fregist, text = "Registrarse")
-    main.add(fwelcome, text = "Menu principal")
-    main.add(fgestionplatos, text = "Gestion de platos")
-    #main.add(fgestionmesas, text = "Gestion de mesas")
-    #main.add(fgestionpedidos, text = "Gestion de pedidos")
+    #Se crea el frame de ubicacion de los elementos de la pantalla de eliminar o actualizar plato
+    featext = Frame(feliminaractualizarplato, bg = bgcolor)
 
-    #Posicionamiento de Frames
+    #Se crea el label de eliminar o actualizar plato
+    leliminaractualizarplato = Label(featext, text = "Platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el listbox del nombre de los platos
+    lbnplatos = Listbox(featext, font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea el listbox del precio de los platos
+    lbpplatos = Listbox(featext, font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea el listbox de la descripcion de los platos
+    lbdesplatos = Listbox(featext, font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea el listbox de la disponibilidad de los platos
+    lbdplatos = Listbox(featext, font = (ftitle, int(fsize / 3), "bold"))
+
+#Funcion para posicionar la pantalla principal
+def pospprincipal():
     #Posicionamiento de la pantalla principal
     fmainmenu.grid(row = 0, column = 0)
 
@@ -562,7 +729,8 @@ def run():
     #Posicionamiento del frame de espacio superior derecho de la pantalla principal
     ftrmspace.grid(row = 0, column = 5)
 
-    #Posicionamiento del login
+#Funcion para posicionar la pantalla de login
+def poslogin():
     #Posicionamiento del frame de espacio superior izquierdo de la pantalla de login
     ftllspace.grid(row = 0, column = 0)
 
@@ -602,7 +770,8 @@ def run():
     #Posicionamiento del frame de espacio superior derecho de la pantalla de login
     ftrlspace.grid(row = 0, column = 2)
 
-    #Posicionamiento del registro
+#Funcion para posicionar la pantalla de registro
+def posregist():
     #Posicionamiento del frame de espacio superior izquierdo de la pantalla de registro
     ftlrspace.grid(row = 0, column = 0)
 
@@ -648,7 +817,8 @@ def run():
     #Posicionamiento del frame de espacio superior derecho de la pantalla de registro
     ftrrspace.grid(row = 0, column = 2)
 
-    #Posicionamiento del menu principal
+#Funcion para posicionar la pantalla de menu principal
+def poswelcome():
     #Posicionamiento del frame de espacio superior izquierdo de la pantalla de menu principal
     ftlwspace.grid(row = 0, column = 0)
     
@@ -682,7 +852,8 @@ def run():
     #Posicionamiento del frame de espacio superior derecho de la pantalla de menu principal
     ftrwspace.grid(row = 0, column = 4)
 
-    #Posicionamiento de la pantalla de gestion de platos
+#Funcion para posicionar la pantalla de gestion de platos
+def posgestionplatos():
     #Posicionamiento del frame de espacio superior izquierdo de la pantalla de gestion de platos
     ftlgpspace.grid(row = 0, column = 0)
 
@@ -696,7 +867,7 @@ def run():
     ftcgpspace.grid(row = 0, column = 2)
 
     #Posicionamiento del frame de ubicacion de los elementos de la pantalla de gestion de platos
-    fgpstext.grid(row = 2, column = 3)
+    fgptext.grid(row = 2, column = 3)
 
     #Posicionamiento del label de gestion de platos
     lgestionplatos.grid(row = 0, column = 0)
@@ -705,13 +876,190 @@ def run():
     bgpagregarplato.grid(row = 1, column = 0)
 
     #Posicionamiento del boton de eliminar plato
-    bgpeliminarplato.grid(row = 2, column = 0)
-
-    #Posicionamiento del boton de actualizar plato
-    bgpactualizarplato.grid(row = 3, column = 0)
+    bgpeliminaractualizarplato.grid(row = 2, column = 0)
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de gestion de platos
     ftrgpspace.grid(row = 0, column = 4)
+
+#Funcion para posicionar la pantalla de agregar plato
+def posagregarplato():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de agregar plato
+    ftlapspace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de agregar plato
+    lagregarplatotitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de agregar plato
+    liagregarplatotitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de agregar plato
+    ftcapspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de agregar plato
+    faptext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de agregar plato
+    lagregarplato.grid(row = 0, column = 0)
+
+    #Posicionamiento del label de nombre de plato
+    lnombreplato.grid(row = 1, column = 0)
+
+    #Posicionamiento del entry de nombre de plato
+    enombreplato.grid(row = 2, column = 0)
+
+    #Posicionamiento del label de precio de plato
+    lprecioplato.grid(row = 3, column = 0)
+
+    #Posicionamiento del entry de precio de plato
+    eprecioplato.grid(row = 4, column = 0)
+
+    #Posicionamiento del label de descripcion de plato
+    ldescripcionplato.grid(row = 5, column = 0)
+
+    #Posicionamiento del entry de descripcion de plato
+    edescripcionplato.grid(row = 6, column = 0)
+
+    #Posicionamiento del label de disponibilidad de plato
+    ldisponibilidadplato.grid(row = 7, column = 0)
+
+    #Posicionamiento del entry de disponibilidad de plato
+    edisponibilidadplato.grid(row = 8, column = 0)
+
+    #Posicionamiento del boton de agregar plato
+    bagregarplato.grid(row = 9, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de agregar plato
+    ftrapspace.grid(row = 0, column = 4)
+
+def poseliminaractualizarplato():
+    #Posicionamiento del logo de la pantalla de eliminar o actualizar plato
+    lieliminaractualizarplatotitle.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de eliminar o actualizar plato
+    leliminaractualizarplatotitle.grid(row = 0, column = 1)
+
+    #Posicionamiento del boton de eliminar plato
+    beliminarplato.grid(row = 0, column = 2, padx = (int(ssize[0] * 0.4), 0))
+
+    #Posicionamiento del boton de actualizar plato
+    bactualizarplato.grid(row = 0, column = 3)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de eliminar o actualizar plato
+    featext.grid(row = 1, column = 0, columnspan = 4)
+
+    #Posicionamiento del label de eliminar o actualizar plato
+    leliminaractualizarplato.grid(row = 0, column = 0, columnspan = 4)
+
+    #Posicionamiento del listbox del nombre de los platos
+    lbnplatos.grid(row = 1, column = 0)
+
+    #Posicionamiento del listbox del precio de los platos
+    lbpplatos.grid(row = 1, column = 1)
+
+    #Posicionamiento del listbox de la descripcion de los platos
+    lbdesplatos.grid(row = 1, column = 2)
+
+    #Posicionamiento del listbox de la disponibilidad de los platos
+    lbdplatos.grid(row = 1, column = 3)
+
+#Funcion para posicionar las pestañas
+def pospestañas():
+    #Se agregan las pestañas
+    main.add(finicio, text = "Inicio")
+    main.add(flogin, text = "Iniciar sesion")
+    main.add(fregist, text = "Registrarse")
+    main.add(fwelcome, text = "Menu principal")
+    main.add(fgestionplatos, text = "Gestion de platos")
+    main.add(fagregarplato, text = "Agregar plato")
+    main.add(feliminaractualizarplato, text = "Eliminar o actualizar plato")
+    #main.add(fgestionmesas, text = "Gestion de mesas")
+    #main.add(fgestionpedidos, text = "Gestion de pedidos")
+
+#Funcion principal
+def run():
+    #Variables globales
+    global ssize, fsize, root, ico, usuario
+
+    #Variables globales de las pantallas
+    global main, finicio
+
+    #Se crea la ventana
+    root = tkinter.Tk()
+    
+    #Se crea el tema
+    sv_ttk.set_theme("light")
+
+    #Se obtiene el tamaño de la pantalla
+    ssize = (root.winfo_screenwidth(), root.winfo_screenheight())
+
+    #Se asignan los tamaños de fuente
+    fsize = int((35 / 1366) * ssize[0])
+
+    #Se asigna el tamaño de 1 tercio de la pantalla
+    trissize = int((455 / 1366) * ssize[0])
+
+    #Se maximiza la ventana
+    root.state("zoomed")
+
+    #Se asigna el titulo y el color de fondo
+    root.title(mrtitle)
+    root.config(bg = bgcolor)
+
+    #Se asigna el icono
+    ico = Image.open("img/logo.png")
+    root.wm_iconphoto(False, ImageTk.PhotoImage(ico))
+
+    #Se crea la pantalla de funcionamiento
+    main = ttk.Notebook(root)
+
+    #MENU PRINCIPAL
+    pmainmenu()
+
+    #INICIO
+    #Se crea la pantalla de inicio
+    finicio = Frame(main, bg = bgcolor)
+
+    #LOGIN
+    plogin()
+
+    #REGISTRO  
+    pregist()
+
+    #BIENVENIDO
+    pwelcome()
+
+    #GESTION DE PLATOS
+    pgestionplatos()
+
+    #AGREGAR PLATO
+    pagregarplato()
+
+    #ELIMINAR O ACTUALIZAR PLATO
+    peliminaractualizarplato()
+
+    #Posicionamiento de las pestañas
+    pospestañas()
+
+    #Posicionamiento de pantalla principal
+    pospprincipal()
+
+    #Posicionamiento de la pantalla de login
+    poslogin()
+
+    #Posicionamiento de la pantalla de registro
+    posregist()
+
+    #Posicionamiento de la pantalla de menu principal
+    poswelcome()
+
+    #Posicionamiento de la pantalla de gestion de platos
+    posgestionplatos()
+
+    #Posicionamiento de la pantalla de agregar plato
+    posagregarplato()
+
+    #Posicionamiento de la pantalla de eliminar o actualizar plato
+    poseliminaractualizarplato()
 
     #Bucle de la ventana
     root.mainloop()
