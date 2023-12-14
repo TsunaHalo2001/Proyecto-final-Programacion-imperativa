@@ -1,8 +1,18 @@
+# Description: Archivo de configuracion del programa
+# Autor: Joan Esteban Villamil Largo
+
+#Importar librerias
+#Libreria para la interfaz grafica
 import tkinter
 from tkinter import *
 from tkinter import ttk, messagebox
+
+#Libreria para el manejo de archivos
 from PIL import Image, ImageTk
+
 import numpy as np
+
+#Libreria para el manejo de contraseñas
 import hashlib
 
 #Tema mamalon Sun Valley
@@ -13,7 +23,10 @@ import sv_ttk
 #0 = Pagina principal
 #1 = Login y registro
 #2 = Menu principal
-#3 = Gestion de platos, mesas y pedidos
+#4 = Gestion de platos
+#5 = Agragar platos
+#6 = Eliminar o actualizar platos
+#7 = Actualizar platos
 pstate = 0
 
 #Variables de ruta de archivos
