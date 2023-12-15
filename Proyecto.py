@@ -670,10 +670,18 @@ def seliminarplato():
         lbdesplatos.delete(lbdesplatos.curselection())
         lbdplatos.delete(lbdplatos.curselection())
 
-        #Se guarda la base de datos de platos
-        txtplatos = open(plist, "w")
-        txtplatos.write(str(lplatos))
-        txtplatos.close()
+        #Se añade un condicional para proteger la estructura del txt
+        if len(lplatos) > 0:
+            #Se guarda la base de datos de platos
+            txtplatos = open(plist, "w")
+            txtplatos.write(str(lplatos))
+            txtplatos.close()
+
+        else:
+            #Se guarda la base de datos de platos
+            txtplatos = open(plist, "w")
+            txtplatos.write("[['arroz chaufa', '11000', 'Arroz con carne', 'no']]")
+            txtplatos.close()
 
         messagebox.showinfo("Eliminado", "Plato eliminado con exito")
 
@@ -855,11 +863,19 @@ def seliminarmesa():
         lbfrmesas.delete(lbfrmesas.curselection())
         lbhrmesas.delete(lbhrmesas.curselection())
         lbnpmesas.delete(lbnpmesas.curselection())
+        
+        #Se añade un condicional para proteger la estructura del txt
+        if len(lmesas) > 0:
+            #Se guarda la base de datos de mesas
+            txtmesas = open(mlist, "w")
+            txtmesas.write(str(lmesas))
+            txtmesas.close()
 
-        #Se guarda la base de datos de mesas
-        txtmesas = open(mlist, "w")
-        txtmesas.write(str(lmesas))
-        txtmesas.close()
+        else:
+            #Se guarda la base de datos de mesas
+            txtmesas = open(mlist, "w")
+            txtmesas.write("[['1', '01/01/2021', '12:00', '1']]")
+            txtmesas.close()
 
         messagebox.showinfo("Eliminado", "Mesa eliminada con exito")
 
@@ -1072,10 +1088,18 @@ def seliminarpedido():
         lbnppedidos.delete(lbnppedidos.curselection())
         lbnmpedidos.delete(lbnmpedidos.curselection())
 
-        #Se guarda la base de datos de pedidos
-        txtpedidos = open(pelist, "w")
-        txtpedidos.write(str(lpedidos))
-        txtpedidos.close()
+        #Se añade un condicional para proteger la estructura del txt
+        if len(lpedidos) > 0:
+            #Se guarda la base de datos de pedidos
+            txtpedidos = open(pelist, "w")
+            txtpedidos.write(str(lpedidos))
+            txtpedidos.close()
+
+        else:
+            #Se guarda la base de datos de pedidos
+            txtpedidos = open(pelist, "w")
+            txtpedidos.write("[['1', '1']]")
+            txtpedidos.close()
 
         messagebox.showinfo("Eliminado", "Pedido eliminado con exito")
 
