@@ -78,7 +78,7 @@ def welcome():
     main.hide(flogin)
     main.hide(fgestionplatos)
     main.hide(fgestionmesas)
-    #main.hide(fgestionpedidos)
+    main.hide(fgestionpedidos)
 
     #Se selecciona la pestaña del menu principal
     main.select(fwelcome)
@@ -206,12 +206,12 @@ def eliminaractualizarplato():
 def actualizarplato():
     global pstate
 
-    root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle + " / " + acptitle)
-
     #Condicional para verificar si se selecciono un plato
     if lbnplatos.curselection() != ():
         #Variable del estado del programa en el valor de actualizar plato
         pstate = 7
+
+        root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle + " / " + acptitle)
 
         #Se agrega la pestaña de agregar plato
         main.add(factualizarplato, text = acptitle)
@@ -354,12 +354,12 @@ def eliminaractualizarmesa():
 def actualizarmesa():
     global pstate
 
-    root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle + " / " + acmtitle)
-
     #Condicional para verificar si se selecciono una mesa
     if lbnmesas.curselection() != ():
         #Variable del estado del programa en el valor de actualizar mesa
         pstate = 11
+
+        root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle + " / " + acmtitle)
 
         #Se agrega la pestaña de agregar mesa
         main.add(factualizarmesa, text = acmtitle)
@@ -387,7 +387,127 @@ def actualizarmesa():
 
 #Funcion para la pantalla de gestion de pedidos
 def gestionpedidos():
-    pass
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gpetitle)
+
+    #Variable del estado del programa en el valor de gestion de pedidos
+    pstate = 12
+
+    #Se agrega la pestaña de gestion de pedidos
+    main.add(fwelcome, text = mptitle)
+    main.add(fgestionpedidos, text = gpetitle)
+
+    #Se selecciona la pestaña de gestion de pedidos
+    main.select(fgestionpedidos)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se remueven las pestañas
+    main.hide(finicio)
+    main.hide(fagregarpedido)
+    main.hide(feliminaractualizarpedido)
+
+#Funcion para la pantalla de agregar pedido
+def agregarpedido():
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + apetitle)
+
+    #Variable del estado del programa en el valor de agregar pedido
+    pstate = 13
+
+    #Se agrega la pestaña de agregar pedido
+    main.add(fagregarpedido, text = apetitle)
+
+    #Se selecciona la pestaña de agregar pedido
+    main.select(fagregarpedido)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+
+#Funcion para la pantalla de eliminar o actualizar pedido
+def eliminaractualizarpedido():
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + eapetitle)
+
+    #Variable del estado del programa en el valor de eliminar o actualizar pedido
+    pstate = 14
+
+    #Variables de listas de pedidos
+    snppedidos = []
+    snmpedidos = []
+
+    #Se agrega la pestaña de agregar pedido
+    main.add(fgestionpedidos, text = gpetitle)
+    main.add(feliminaractualizarpedido, text = eapetitle)
+
+    #Se selecciona la pestaña de agregar pedido
+    main.select(feliminaractualizarpedido)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se asigna la funcion de seleccionar lineas de listbox
+    lbnppedidos.bind("<ButtonRelease-1>", lambda event: selneliminarpedido())
+    lbnmpedidos.bind("<ButtonRelease-1>", lambda event: selnpeliminarpedido())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+    main.hide(factualizarpedido)
+
+    if len(lpedidos) > 0:
+        #Se organiza la lista de numeros de pedidos
+        for i in range(len(lpedidos)):
+            snppedidos.append(lpedidos[i][0])
+
+        #Se organiza la lista de numeros de mesas de pedidos
+        for i in range(len(lpedidos)):
+            snmpedidos.append(lpedidos[i][1])
+
+    #Se asigna el listado de numeros de pedidos
+    lbnppedidos.delete(0, END)
+    lbnppedidos.insert(0, *snppedidos)
+
+    #Se asigna el listado de numeros de mesas de pedidos
+    lbnmpedidos.delete(0, END)
+    lbnmpedidos.insert(0, *snmpedidos)
+
+#Funcion para la pantalla de actualizar pedido
+def actualizarpedido():
+    global pstate
+
+    #Condicional para verificar si se selecciono un pedido
+    if lbnppedidos.curselection() != ():
+        #Variable del estado del programa en el valor de actualizar pedido
+        pstate = 15
+
+        root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + eapetitle + " / " + acpetitle)
+
+        #Se agrega la pestaña de agregar pedido
+        main.add(factualizarpedido, text = acpetitle)
+
+        #Se selecciona la pestaña de agregar pedido
+        main.select(factualizarpedido)
+        
+        #Se limpian los entrys
+        epanumeromesa.delete(0, END)
+        epanumeroplato.delete(0, END)
+
+        #Se asignan los entrys con los valores del pedido seleccionado
+        epanumeroplato.insert(0, lbnppedidos.get(lbnppedidos.curselection()))
+        epanumeromesa.insert(0, lbnmpedidos.get(lbnmpedidos.curselection()))
+
+        #Se asigna la funcion de volver a la pantalla anterior
+        main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+        #Se muestra la pestaña de menu principal
+        main.hide(fgestionpedidos)
 
 #Funcion para iniciar sesion
 def slogin():
@@ -856,6 +976,147 @@ def selnpeliminarmesa():
     lbfrmesas.selection_set(lbnpmesas.curselection())
     lbhrmesas.selection_set(lbnpmesas.curselection())
 
+#Funcion para agregar pedido
+def sagregarpedido():
+    global lpedidos
+
+    #Lista temporal de pedidos
+    tlpedidos = []
+
+    bandera = False
+
+    #Condicional para verificar si los campos estan vacios
+    if epnumeroplato.get() == "" or epnumeromesa.get() == "":
+        messagebox.showerror("Error", "No se pueden dejar campos vacios")
+
+    #Condicional para verificar si el numero de plato es un numero y el numero de mesa es un numero
+    elif epnumeroplato.get().isdigit() == False or epnumeromesa.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de plato y el numero de mesa solo pueden ser numeros y no pueden ser negativos")
+
+    #Condicional para verificar si el numero de plato y el numero de mesa existen
+    else:
+        #Condicional para verificar si el numero de plato y el numero de mesa existen
+        try:
+            lplatos[int(epnumeroplato.get())][0]
+            bandera = True
+
+        except IndexError:
+            messagebox.showerror("Error", "El numero de plato no existe")
+            bandera = False
+
+        if bandera == True:
+            for i in range(len(lmesas)):
+                if lmesas[i][0] == epnumeromesa.get():
+                    bandera = True
+                    break
+
+                else:
+                    bandera = False
+
+        if bandera == True:
+            #Se agrega el pedido a la base de datos
+            tlpedidos.append(epnumeroplato.get())
+            tlpedidos.append(epnumeromesa.get())
+
+            lpedidos.append(tlpedidos)
+
+            #Se guarda la base de datos de pedidos
+            txtpedidos = open(pelist, "w")
+            txtpedidos.write(str(lpedidos))
+            txtpedidos.close()
+
+            messagebox.showinfo("Agregado", "Pedido agregado con exito")
+            gestionpedidos()
+                
+        else:
+            messagebox.showerror("Error", "El numero de plato o el numero de mesa no existen")
+
+#Funcion para eliminar pedido
+def seliminarpedido():
+    #Condicional para verificar si se selecciono un pedido
+    if lbnppedidos.curselection() != ():
+        #Se elimina el pedido de la base de datos
+        lpedidos.pop(lbnppedidos.curselection()[0])
+
+        #Se eliminan los pedidos de los listbox
+        lbnppedidos.delete(lbnppedidos.curselection())
+        lbnmpedidos.delete(lbnmpedidos.curselection())
+
+        #Se guarda la base de datos de pedidos
+        txtpedidos = open(pelist, "w")
+        txtpedidos.write(str(lpedidos))
+        txtpedidos.close()
+
+        messagebox.showinfo("Eliminado", "Pedido eliminado con exito")
+
+#Funcion para actualizar pedido
+def sactualizarpedido():
+    global lpedidos
+
+    #Lista temporal de pedidos
+    tlpedidos = []
+
+    bandera = False
+
+    #Condicional para verificar si los campos estan vacios
+    if epanumeroplato.get() == "" or epanumeromesa.get() == "":
+        messagebox.showerror("Error", "No se pueden dejar campos vacios")
+
+    #Condicional para verificar si el numero de plato es un numero y el numero de mesa es un numero
+    elif epanumeroplato.get().isdigit() == False or epanumeromesa.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de plato y el numero de mesa solo pueden ser numeros y no pueden ser negativos")
+
+    #Condicional para verificar si el numero de plato y el numero de mesa existen
+    else:
+        #Condicional para verificar si el numero de plato y el numero de mesa existen
+        try:
+            lplatos[int(epanumeroplato.get())][0]
+            bandera = True
+
+        except IndexError:
+            messagebox.showerror("Error", "El numero de plato no existe")
+            bandera = False
+
+        if bandera == True:
+            for i in range(len(lmesas)):
+                if lmesas[i][0] == epanumeromesa.get():
+                    bandera = True
+                    break
+
+                else:
+                    bandera = False
+
+        if bandera == True:
+            #Se agrega el pedido a la base de datos
+            tlpedidos.append(epanumeroplato.get())
+            tlpedidos.append(epanumeromesa.get())
+
+            lpedidos.pop(lbnppedidos.curselection()[0])
+            lpedidos.insert(lbnppedidos.curselection()[0], tlpedidos)
+
+            #Se guarda la base de datos de pedidos
+            txtpedidos = open(pelist, "w")
+            txtpedidos.write(str(lpedidos))
+            txtpedidos.close()
+
+            messagebox.showinfo("Actualizado", "Pedido actualizado con exito")
+
+            eliminaractualizarpedido()
+
+        else:
+            messagebox.showerror("Error", "El numero de plato o el numero de mesa no existen")
+
+#Funciones para seleccionar lineas de listbox de pedidos
+def selneliminarpedido():
+    lbnmpedidos.selection_clear(0, END)
+
+    lbnmpedidos.selection_set(lbnppedidos.curselection())
+
+def selnpeliminarpedido():
+    lbnppedidos.selection_clear(0, END)
+
+    lbnppedidos.selection_set(lbnmpedidos.curselection())
+
 #Funcion para volver a la pantalla anterior
 def back():
     global pstate
@@ -884,6 +1145,10 @@ def back():
         main.hide(fagregarmesa)
         main.hide(feliminaractualizarmesa)
         main.hide(factualizarmesa)
+        main.hide(fgestionpedidos)
+        main.hide(fagregarpedido)
+        main.hide(feliminaractualizarpedido)
+        main.hide(factualizarpedido)
         main.grid_remove()
 
         #Se agrega la pantalla principal
@@ -946,6 +1211,28 @@ def back():
     #Condicional para volver a la pantalla de eliminar o actualizar mesas
     elif pstate == 11:
         pstate = 10
+
+    elif pstate == 12:
+        #Se reinician los entrys
+        epnumeroplato.delete(0, END)
+        epnumeromesa.delete(0, END)
+
+        #Se vuelve a la pantalla de gestion de pedidos
+        gestionpedidos()
+        pstate = 3
+
+    #Condicional para volver a la pantalla de gestion de pedidos
+    elif pstate == 13:
+        pstate = 12
+
+    elif pstate == 14:
+        #Se vuelve a la pantalla de eliminar o actualizar pedidos
+        eliminaractualizarpedido()
+        pstate = 12
+
+    #Condicional para volver a la pantalla de eliminar o actualizar pedidos
+    elif pstate == 15:
+        pstate = 14
 
 #Funcion para definir la pantalla principal
 def pmainmenu():
@@ -1511,6 +1798,166 @@ def pactualizarmesa():
     #Se crea el boton de actualizar mesa
     baactualizarmesa = Button(facmtext, text = acmtitle, command = sactualizarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
+#Funcion para definir la pantalla de gestion de pedidos
+def pgestionpedidos():
+    global fgestionpedidos, ftlgpespace, ftcgpespace, ftrgpespace, lgestionpedidostitle, ligestionpedidostitle, fgpetext, lgestionpedidos, bgpagregarpedido, bgpeliminaractualizarpedido
+
+    #Se crea la pantalla de gestion de pedidos
+    fgestionpedidos = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de gestion de pedidos
+    ftlgpespace = Frame(fgestionpedidos, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de gestion de pedidos
+    lgestionpedidostitle = Label(fgestionpedidos, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de gestion de pedidos
+    ligestionpedidostitle = Label(fgestionpedidos, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de gestion de pedidos
+    ftcgpespace = Frame(fgestionpedidos, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de gestion de pedidos
+    ftrgpespace = Frame(fgestionpedidos, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de gestion de pedidos
+    fgpetext = Frame(fgestionpedidos, bg = bgcolor)
+
+    #Se crea el label de gestion de pedidos
+    lgestionpedidos = Label(fgpetext, text = "Gestion de pedidos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el boton de agregar pedido
+    bgpagregarpedido = Button(fgpetext, text = "Agregar pedido", command = agregarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de eliminar o actualizar pedido
+    bgpeliminaractualizarpedido = Button(fgpetext, text = "Eliminar o actualizar pedido", command = eliminaractualizarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+#Funcion para definir la pantalla de agregar pedido
+def pagregarpedido():
+    global fagregarpedido, ftlagpespace, lagregarpedidotitle, liagregarpedidotitle, ftcagpespace, ftragpespace, fagpetext, lagregarpedido, lpnombreplato, lpnumeromesa, epnumeromesa, lpnumeroplato, epnumeroplato, bagregarpedido
+
+    #Se crea la pantalla de agregar pedido
+    fagregarpedido = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de agregar pedido
+    ftlagpespace = Frame(fagregarpedido, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de agregar pedido
+    lagregarpedidotitle = Label(fagregarpedido, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de agregar pedido
+    liagregarpedidotitle = Label(fagregarpedido, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de agregar pedido
+    ftcagpespace = Frame(fagregarpedido, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de agregar pedido
+    ftragpespace = Frame(fagregarpedido, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de agregar pedido
+    fagpetext = Frame(fagregarpedido, bg = bgcolor)
+
+    #Se crea el label de agregar pedido
+    lagregarpedido = Label(fagpetext, text = "Agregar pedido", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label donde aparecera el plato segun el numero escrito
+    lpnombreplato = Label(fagpetext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor, relief = "raised")
+
+    #Se crea label de numero de plato
+    lpnumeroplato = Label(fagpetext, text = "Numero de plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de pedido
+    epnumeroplato = Entry(fagpetext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea label de numero de mesa
+    lpnumeromesa = Label(fagpetext, text = "Numero de mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de mesa
+    epnumeromesa = Entry(fagpetext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el boton de agregar pedido
+    bagregarpedido = Button(fagpetext, text = "Agregar pedido", command = sagregarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+#Funcion para definir la pantalla de eliminar o actualizar pedido
+def peliminaractualizarpedido():
+    global feliminaractualizarpedido, lieliminaractualizarpedidotitle, leliminaractualizarpedidotitle, feapetext, leliminaractualizarpedido, beliminarpedido, bactualizarpedido, lbnppedidos, lnppedidos, lbnmpedidos, lnmpedidos
+
+    #Se crea la pantalla de eliminar o actualizar pedido
+    feliminaractualizarpedido = Frame(main, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de eliminar o actualizar pedido
+    lieliminaractualizarpedidotitle = Label(feliminaractualizarpedido, image = logosmall, bg = bgcolor)
+
+    #Se crea el frame de titulo de la pantalla de eliminar o actualizar pedido
+    leliminaractualizarpedidotitle = Label(feliminaractualizarpedido, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el boton de eliminar pedido
+    beliminarpedido = Button(feliminaractualizarpedido, bg = "red", text = "Eliminar pedido", command = seliminarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+    #Se crea el boton de actualizar pedido
+    bactualizarpedido = Button(feliminaractualizarpedido, text = acptitle, command = actualizarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de eliminar o actualizar pedido
+    feapetext = Frame(feliminaractualizarpedido, bg = bgcolor)
+
+    #Se crea el label de eliminar o actualizar pedido
+    leliminaractualizarpedido = Label(feapetext, text = "Pedidos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label del listbox de numero de plato
+    lnppedidos = Label(feapetext, text = "Numero de plato", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox del numero de plato
+    lbnppedidos = Listbox(feapetext, exportselection = 0,font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea label del listbox de numero de mesa
+    lnmpedidos = Label(feapetext, text = "Numero de mesa", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox del numero de mesa
+    lbnmpedidos = Listbox(feapetext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+
+#Funcion para definir la pantalla de actualizar pedido
+def pactualizarpedido():
+    global factualizarpedido, ftlacpespace, lactualizarpedidotitle, liactualizarpedidotitle, ftcacpespace, ftracpespace, facpetext, lactualizarpedido, lpanumeromesa, epanumeromesa, lpanumeroplato, epanumeroplato, baactualizarpedido
+
+    #Se crea la pantalla de actualizar pedido
+    factualizarpedido = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de actualizar pedido
+    ftlacpespace = Frame(factualizarpedido, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de actualizar pedido
+    lactualizarpedidotitle = Label(factualizarpedido, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de actualizar pedido
+    liactualizarpedidotitle = Label(factualizarpedido, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de actualizar pedido
+    ftcacpespace = Frame(factualizarpedido, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de actualizar pedido
+    ftracpespace = Frame(factualizarpedido, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de actualizar pedido
+    facpetext = Frame(factualizarpedido, bg = bgcolor)
+
+    #Se crea el label de actualizar pedido
+    lactualizarpedido = Label(facpetext, text = acptitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label de numero de mesa
+    lpanumeromesa = Label(facpetext, text = "Numero de mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de mesa
+    epanumeromesa = Entry(facpetext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea label de numero de plato
+    lpanumeroplato = Label(facpetext, text = "Numero de plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de plato
+    epanumeroplato = Entry(facpetext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el boton de actualizar pedido
+    baactualizarpedido = Button(facpetext, text = acptitle, command = sactualizarpedido, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
 #Funcion para posicionar la pantalla principal
 def pospprincipal():
     #Posicionamiento de la pantalla principal
@@ -2018,6 +2465,140 @@ def posactualizarmesa():
     #Posicionamiento del frame de espacio superior derecho de la pantalla de actualizar mesa
     ftracmspace.grid(row = 0, column = 4)
 
+#Funcion para posicionar la pantalla de gestion de pedidos
+def posgestionpedidos():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de gestion de pedidos
+    ftlgpespace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de gestion de pedidos
+    lgestionpedidostitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de gestion de pedidos
+    ligestionpedidostitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de gestion de pedidos
+    ftcgpespace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de gestion de pedidos
+    fgpetext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de gestion de pedidos
+    lgestionpedidos.grid(row = 0, column = 0)
+
+    #Posicionamiento del boton de agregar pedido
+    bgpagregarpedido.grid(row = 1, column = 0)
+
+    #Posicionamiento del boton de eliminar o actualizar pedido
+    bgpeliminaractualizarpedido.grid(row = 2, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de gestion de pedidos
+    ftrgpespace.grid(row = 0, column = 4)
+
+#Funcion para posicionar la pantalla de agregar pedido
+def posagregarpedido():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de agregar pedido
+    ftlagpespace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de agregar pedido
+    lagregarpedidotitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de agregar pedido
+    liagregarpedidotitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de agregar pedido
+    ftcagpespace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de agregar pedido
+    fagpetext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de agregar pedido
+    lagregarpedido.grid(row = 0, column = 0)
+
+    #Posicionamiento del label de numero de mesa
+    lpnumeromesa.grid(row = 1, column = 0)
+
+    #Posicionamiento del entry de numero de mesa
+    epnumeromesa.grid(row = 2, column = 0)
+
+    #Posicionamiento del label de numero de plato
+    lpnumeroplato.grid(row = 3, column = 0)
+
+    #Posicionamiento del entry de numero de plato
+    epnumeroplato.grid(row = 4, column = 0)
+
+    #Posicionamiento del boton de agregar pedido
+    bagregarpedido.grid(row = 5, column = 0)
+
+#Funcion para posicionar la pantalla de eliminar o actualizar pedido
+def poseliminaractualizarpedido():
+    #Posicionamiento del logo de la pantalla de eliminar o actualizar pedido
+    lieliminaractualizarpedidotitle.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de eliminar o actualizar pedido
+    leliminaractualizarpedidotitle.grid(row = 0, column = 1)
+
+    #Posicionamiento del boton de eliminar pedido
+    beliminarpedido.grid(row = 0, column = 2, padx = (int(ssize[0] * 0.4), 0))
+
+    #Posicionamiento del boton de actualizar pedido
+    bactualizarpedido.grid(row = 0, column = 3)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de eliminar o actualizar pedido
+    feapetext.grid(row = 1, column = 0, columnspan = 4)
+
+    #Posicionamiento del label de eliminar o actualizar pedido
+    leliminaractualizarpedido.grid(row = 0, column = 0, columnspan = 4)
+
+    #Posicionamiento del label del listbox de numero de mesas
+    lnppedidos.grid(row = 1, column = 0)
+
+    #Posicionamiento del listbox del numero de las mesas
+    lbnppedidos.grid(row = 2, column = 0)
+
+    #Posicionamiento del label del listbox de numero de platos
+    lnmpedidos.grid(row = 1, column = 1)
+
+    #Posicionamiento del listbox del numero de los platos
+    lbnmpedidos.grid(row = 2, column = 1)
+
+#Funcion para posicionar la pantalla de actualizar pedido
+def posactualizarpedido():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de actualizar pedido
+    ftlacpespace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de actualizar pedido
+    lactualizarpedidotitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de actualizar pedido
+    liactualizarpedidotitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de actualizar pedido
+    ftcacpespace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de actualizar pedido
+    facpetext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de actualizar pedido
+    lactualizarpedido.grid(row = 0, column = 0)
+
+    #Posicionamiento del label de numero de mesa
+    lpanumeromesa.grid(row = 1, column = 0)
+
+    #Posicionamiento del entry de numero de mesa
+    epanumeromesa.grid(row = 2, column = 0)
+
+    #Posicionamiento del label de numero de plato
+    lpanumeroplato.grid(row = 3, column = 0)
+
+    #Posicionamiento del entry de numero de plato
+    epanumeroplato.grid(row = 4, column = 0)
+
+    #Posicionamiento del boton de actualizar pedido
+    baactualizarpedido.grid(row = 5, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de actualizar pedido
+    ftracpespace.grid(row = 0, column = 4)
+
 #Funcion para posicionar las pestañas
 def pospestañas():
     #Se agregan las pestañas
@@ -2033,7 +2614,10 @@ def pospestañas():
     main.add(fagregarmesa, text = amtitle)
     main.add(feliminaractualizarmesa, text = eamtitle)
     main.add(factualizarmesa, text = acmtitle)
-    #main.add(fgestionpedidos, text = "Gestion de pedidos")
+    main.add(fgestionpedidos, text = gpetitle)
+    main.add(fagregarpedido, text = apetitle)
+    main.add(feliminaractualizarpedido, text = eapetitle)
+    main.add(factualizarpedido, text = acpetitle)
 
 #Funcion principal
 def run():
@@ -2112,6 +2696,18 @@ def run():
     #ACTUALIZAR MESA
     pactualizarmesa()
 
+    #GESTION DE PEDIDOS
+    pgestionpedidos()
+
+    #AGREGAR PEDIDO
+    pagregarpedido()
+
+    #ELIMINAR O ACTUALIZAR PEDIDO
+    peliminaractualizarpedido()
+
+    #ACTUALIZAR PEDIDO
+    pactualizarpedido()
+
     #Posicionamiento de las pestañas
     pospestañas()
 
@@ -2150,6 +2746,18 @@ def run():
 
     #Posicionamiento de la pantalla de actualizar mesa
     posactualizarmesa()
+
+    #Posicionamiento de la pantalla de gestion de pedidos
+    posgestionpedidos()
+
+    #Posicionamiento de la pantalla de agregar pedido
+    posagregarpedido()
+
+    #Posicionamiento de la pantalla de eliminar o actualizar pedido
+    poseliminaractualizarpedido()
+
+    #Posicionamiento de la pantalla de actualizar pedido
+    posactualizarpedido()
 
     #Bucle de la ventana
     root.mainloop()
