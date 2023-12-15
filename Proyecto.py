@@ -5,6 +5,8 @@ from configfile import *
 def regist():
     global pstate
 
+    root.title(mrtitle + " - " + rtitle)
+
     #Variable del estado del programa en el valor de login y registro
     pstate = 1
 
@@ -15,8 +17,8 @@ def regist():
     main.grid(row = 0, column = 0)
 
     #Se agregan las pestañas
-    main.add(finicio, text = "Inicio")
-    main.add(fregist, text = "Registrarse")
+    main.add(finicio, text = ititle)
+    main.add(fregist, text = rtitle)
 
     #Se selecciona la pestaña de registro
     main.select(fregist)
@@ -33,6 +35,8 @@ def regist():
 def login():
     global pstate
 
+    root.title(mrtitle + " - " + ltitle)
+
     #Variable del estado del programa en el valor de login y registro
     pstate = 1
 
@@ -43,8 +47,8 @@ def login():
     main.grid(row = 0, column = 0)
 
     #Se agregan las pestañas
-    main.add(finicio, text = "Inicio")
-    main.add(flogin, text = "Iniciar sesion")
+    main.add(finicio, text = ititle)
+    main.add(flogin, text = ltitle)
 
     #Se selecciona la pestaña de login
     main.select(flogin)
@@ -61,18 +65,20 @@ def login():
 def welcome():
     global pstate, usuario
 
+    root.title(mrtitle + " - " + mptitle)
+
     #Variable del estado del programa en el valor de menu principal
     pstate = 2
 
     #Se agrega la pestaña del menu principal
-    main.add(finicio, text = "Inicio")
-    main.add(fwelcome, text = "Menu principal")
+    main.add(finicio, text = ititle)
+    main.add(fwelcome, text = mptitle)
 
     #Se remueven las pestañas
     main.hide(flogin)
     main.hide(fgestionplatos)
-    #main.forget(fgestionmesas)
-    #main.forget(fgestionpedidos)
+    main.hide(fgestionmesas)
+    #main.hide(fgestionpedidos)
 
     #Se selecciona la pestaña del menu principal
     main.select(fwelcome)
@@ -87,12 +93,14 @@ def welcome():
 def gestionplatos():
     global pstate
 
+    root.title(mrtitle + " - " + mptitle + " / " + gptitle)
+
     #Variable del estado del programa en el valor de gestion de platos
     pstate = 4
 
     #Se agrega la pestaña de gestion de platos
-    main.add(fwelcome, text = "Menu principal")
-    main.add(fgestionplatos, text = "Gestion de platos")
+    main.add(fwelcome, text = mptitle)
+    main.add(fgestionplatos, text = gptitle)
 
     #Se selecciona la pestaña de gestion de platos
     main.select(fgestionplatos)
@@ -109,11 +117,13 @@ def gestionplatos():
 def agregarplato():
     global pstate
 
+    root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + aptitle)
+
     #Variable del estado del programa en el valor de agregar plato
     pstate = 5
 
     #Se agrega la pestaña de agregar plato
-    main.add(fagregarplato, text = "Agregar plato")
+    main.add(fagregarplato, text = aptitle)
 
     #Se selecciona la pestaña de agregar plato
     main.select(fagregarplato)
@@ -128,6 +138,8 @@ def agregarplato():
 def eliminaractualizarplato():
     global pstate
 
+    root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle)
+
     #Variable del estado del programa en el valor de eliminar o actualizar plato
     pstate = 6
 
@@ -138,8 +150,8 @@ def eliminaractualizarplato():
     sdplatos = []
 
     #Se agrega la pestaña de agregar plato
-    main.add(fgestionplatos, text = "Gestion de platos")
-    main.add(feliminaractualizarplato, text = "Eliminar o actualizar plato")
+    main.add(fgestionplatos, text = gptitle)
+    main.add(feliminaractualizarplato, text = eaptitle)
 
     #Se selecciona la pestaña de agregar plato
     main.select(feliminaractualizarplato)
@@ -157,21 +169,22 @@ def eliminaractualizarplato():
     main.hide(fwelcome)
     main.hide(factualizarplato)
 
-    #Se organiza la lista de nombres de platos
-    for i in range(len(lplatos)):
-        snplatos.append(lplatos[i][0].capitalize())
+    if len(lplatos) > 0:
+        #Se organiza la lista de nombres de platos
+        for i in range(len(lplatos)):
+            snplatos.append(lplatos[i][0].capitalize())
 
-    #Se organiza la lista de precios de platos
-    for i in range(len(lplatos)):
-        spplatos.append(lplatos[i][1])
+        #Se organiza la lista de precios de platos
+        for i in range(len(lplatos)):
+            spplatos.append(lplatos[i][1])
 
-    #Se organiza la lista de descripciones de platos
-    for i in range(len(lplatos)):
-        sdesplatos.append(lplatos[i][2])
+        #Se organiza la lista de descripciones de platos
+        for i in range(len(lplatos)):
+            sdesplatos.append(lplatos[i][2])
 
-    #Se organiza la lista de disponibilidades de platos
-    for i in range(len(lplatos)):
-        sdplatos.append(lplatos[i][3])
+        #Se organiza la lista de disponibilidades de platos
+        for i in range(len(lplatos)):
+            sdplatos.append(lplatos[i][3])
 
     #Se asigna el listado de nombres de platos
     lbnplatos.delete(0, END)
@@ -193,13 +206,15 @@ def eliminaractualizarplato():
 def actualizarplato():
     global pstate
 
+    root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle + " / " + acptitle)
+
     #Condicional para verificar si se selecciono un plato
     if lbnplatos.curselection() != ():
         #Variable del estado del programa en el valor de actualizar plato
         pstate = 7
 
         #Se agrega la pestaña de agregar plato
-        main.add(factualizarplato, text = "Actualizar plato")
+        main.add(factualizarplato, text = acptitle)
 
         #Se selecciona la pestaña de agregar plato
         main.select(factualizarplato)
@@ -224,7 +239,151 @@ def actualizarplato():
 
 #Funcion para la pantalla de gestion de mesas
 def gestionmesas():
-    pass
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gmtitle)
+
+    #Variable del estado del programa en el valor de gestion de mesas
+    pstate = 8
+
+    #Se agrega la pestaña de gestion de mesas
+    main.add(fwelcome, text = mptitle)
+    main.add(fgestionmesas, text = gmtitle)
+
+    #Se selecciona la pestaña de gestion de mesas
+    main.select(fgestionmesas)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se remueven las pestañas
+    main.hide(finicio)
+    main.hide(fagregarmesa)
+    main.hide(feliminaractualizarmesa)
+
+#Funcion para la pantalla de agregar mesa
+def agregarmesa():
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + aptitle)
+
+    #Variable del estado del programa en el valor de agregar mesa
+    pstate = 9
+
+    #Se agrega la pestaña de agregar mesa
+    main.add(fagregarmesa, text = aptitle)
+
+    #Se selecciona la pestaña de agregar mesa
+    main.select(fagregarmesa)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+
+#Funcion para la pantalla de eliminar o actualizar mesa
+def eliminaractualizarmesa():
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle)
+
+    #Variable del estado del programa en el valor de eliminar o actualizar mesa
+    pstate = 10
+
+    #Variables de listas de mesas
+    snmesas = []
+    sfrmesas = []
+    shrmesas = []
+    snpmesas = []
+
+    #Se agrega la pestaña de agregar mesa
+    main.add(fgestionmesas, text = gmtitle)
+    main.add(feliminaractualizarmesa, text = eamtitle)
+
+    #Se selecciona la pestaña de agregar mesa
+    main.select(feliminaractualizarmesa)
+
+    #Se asigna la funcion de volver a la pantalla anterior
+    main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+    #Se asigna la funcion de seleccionar lineas de listbox
+    lbnmesas.bind("<ButtonRelease-1>", lambda event: selneliminarmesa())
+    lbfrmesas.bind("<ButtonRelease-1>", lambda event: selfreliminarmesa())
+    lbhrmesas.bind("<ButtonRelease-1>", lambda event: selhreliminarmesa())
+    lbnpmesas.bind("<ButtonRelease-1>", lambda event: selnpeliminarmesa())
+
+    #Se muestra la pestaña de menu principal
+    main.hide(fwelcome)
+    main.hide(factualizarmesa)
+
+    if len(lmesas) > 0:
+        #Se organiza la lista de numeros de mesas
+        for i in range(len(lmesas)):
+            snmesas.append(lmesas[i][0])
+
+        #Se organiza la lista de fechas de reservacion de mesas
+        for i in range(len(lmesas)):
+            sfrmesas.append(lmesas[i][1])
+
+        #Se organiza la lista de horas de reservacion de mesas
+        for i in range(len(lmesas)):
+            shrmesas.append(lmesas[i][2])
+
+        #Se organiza la lista de numeros de personas de mesas
+        for i in range(len(lmesas)):
+            snpmesas.append(lmesas[i][3])
+
+    #Se asigna el listado de numeros de mesas
+    lbnmesas.delete(0, END)
+    lbnmesas.insert(0, *snmesas)
+
+    #Se asigna el listado de fechas de reservacion de mesas
+    lbfrmesas.delete(0, END)
+    lbfrmesas.insert(0, *sfrmesas)
+
+    #Se asigna el listado de horas de reservacion de mesas
+    lbhrmesas.delete(0, END)
+    lbhrmesas.insert(0, *shrmesas)
+
+    #Se asigna el listado de numeros de personas de mesas
+    lbnpmesas.delete(0, END)
+    lbnpmesas.insert(0, *snpmesas)
+
+#Funcion para la pantalla de actualizar mesa
+def actualizarmesa():
+    global pstate
+
+    root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle + " / " + acmtitle)
+
+    #Condicional para verificar si se selecciono una mesa
+    if lbnmesas.curselection() != ():
+        #Variable del estado del programa en el valor de actualizar mesa
+        pstate = 11
+
+        #Se agrega la pestaña de agregar mesa
+        main.add(factualizarmesa, text = acmtitle)
+
+        #Se selecciona la pestaña de agregar mesa
+        main.select(factualizarmesa)
+        
+        #Se limpian los entrys
+        eanumeromesa.delete(0, END)
+        eafechareservacion.delete(0, END)
+        eahorareservacion.delete(0, END)
+        eanumeropersonas.delete(0, END)
+
+        #Se asignan los entrys con los valores de la mesa seleccionada
+        eanumeromesa.insert(0, lbnmesas.get(lbnmesas.curselection()))
+        eafechareservacion.insert(0, lbfrmesas.get(lbfrmesas.curselection()))
+        eahorareservacion.insert(0, lbhrmesas.get(lbhrmesas.curselection()))
+        eanumeropersonas.insert(0, lbnpmesas.get(lbnpmesas.curselection()))
+
+        #Se asigna la funcion de volver a la pantalla anterior
+        main.bind("<<NotebookTabChanged>>", lambda event: back())
+
+        #Se muestra la pestaña de menu principal
+        main.hide(fgestionmesas)
 
 #Funcion para la pantalla de gestion de pedidos
 def gestionpedidos():
@@ -333,6 +492,7 @@ def sagregarplato():
 
     #Lista temporal de platos
     tlplatos = []
+    bandera = False
     
     #Condicional para verificar si los campos estan vacios
     if enombreplato.get() == "" or eprecioplato.get() == "" or edescripcionplato.get() == "" or edisponibilidadplato.get() == "":
@@ -348,13 +508,16 @@ def sagregarplato():
 
     else:
         #Condicional para verificar si el plato ya existe
-        try:
-            for i in range(len(lplatos)):
-                lplatos[i].index(enombreplato.get().lower())
-            messagebox.showerror("Error", "El plato ya existe")
+        for i in range(len(lplatos)):
+            if lplatos[i][0] == enombreplato.get().lower():
+                messagebox.showerror("Error", "El plato ya existe")
+                bandera = True
+                break
 
-        #Excepcion para cuando el plato no existe
-        except ValueError:
+            else:
+                bandera = False
+        
+        if bandera == False:
             #Se agrega el plato a la base de datos
             tlplatos.append(enombreplato.get().lower())
             tlplatos.append(eprecioplato.get())
@@ -369,6 +532,7 @@ def sagregarplato():
             txtplatos.close()
 
             messagebox.showinfo("Agregado", "Plato agregado con exito")
+            gestionplatos()
 
 #Funcion para eliminar plato
 def seliminarplato():
@@ -397,6 +561,8 @@ def sactualizarplato():
     #Lista temporal de platos
     tlplatos = []
 
+    bandera = False
+
     #Condicional para verificar si los campos estan vacios
     if eanombreplato.get() == "" or eaprecioplato.get() == "" or eadescripcionplato.get() == "" or eadisponibilidadplato.get() == "":
         messagebox.showerror("Error", "No se pueden dejar campos vacios")
@@ -411,19 +577,28 @@ def sactualizarplato():
 
     else:
         #Condicional para verificar si el plato ya existe
-        try:
-            for i in range(len(lplatos)):
-                lplatos[i].index(eanombreplato.get().lower())
-            messagebox.showerror("Error", "El plato ya existe")
+        tlplatos.append(eanombreplato.get().lower())
+        tlplatos.append(eaprecioplato.get())
+        tlplatos.append(eadescripcionplato.get())
+        tlplatos.append(eadisponibilidadplato.get().lower())
 
-        #Excepcion para cuando el plato no existe
-        except ValueError:
-            #Se agrega el plato a la base de datos
-            tlplatos.append(eanombreplato.get().lower())
-            tlplatos.append(eaprecioplato.get())
-            tlplatos.append(eadescripcionplato.get())
-            tlplatos.append(eadisponibilidadplato.get().lower())
+        for i in range(len(lplatos)):
+            if lplatos[i][0] == eanombreplato.get().lower() and lplatos[i] == tlplatos:
+                messagebox.showerror("Error", "El plato ya existe")
+                bandera = True
+                break
 
+            else:
+                if bandera == False:
+                    for j in range(len(lplatos)):
+                        if lplatos[j][0] == eanombreplato.get().lower() and j != lbnplatos.curselection()[0]:
+                            messagebox.showerror("Error", "El plato ya existe")
+                            bandera = True
+                            break
+                        else:
+                            bandera = False
+
+        if bandera == False:
             lplatos.pop(lbnplatos.curselection()[0])
             lplatos.insert(lbnplatos.curselection()[0], tlplatos)
 
@@ -434,7 +609,9 @@ def sactualizarplato():
 
             messagebox.showinfo("Actualizado", "Plato actualizado con exito")
 
-#Funciones para seleccionar lineas de listbox 
+            eliminaractualizarplato()
+
+#Funciones para seleccionar lineas de listbox de platos 
 def selneliminarplato():
     lbpplatos.selection_clear(0, END)
     lbdesplatos.selection_clear(0, END)
@@ -471,6 +648,214 @@ def seldeliminarplato():
     lbdesplatos.selection_set(lbdplatos.curselection())
     lbnplatos.selection_set(lbdplatos.curselection())
 
+#Funcion para agregar mesa
+def sagregarmesa():
+    global lmesas
+
+    #Lista temporal de mesas
+    tlmesas = []
+
+    bandera = False
+
+    #Condicional para verificar si los campos estan vacios
+    if enumeromesa.get() == "" or efechareservacion.get() == "" or ehorareservacion.get() == "" or enumeropersonas.get() == "":
+        messagebox.showerror("Error", "No se pueden dejar campos vacios")
+
+    #Condicional para verificar si el numero de mesa es un numero
+    elif enumeromesa.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de mesa solo puede ser un numero y no puede ser negativo")
+
+    #Condicional para verificar si el numero de personas es un numero
+    elif enumeropersonas.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de personas solo puede ser un numero y no puede ser negativo")
+
+    #Condicional para validar fecha y hora
+    try:
+        #Condicional para verificar que la fecha de reservacion sea valida
+        if efechareservacion.get()[2] != "/" and efechareservacion.get()[5] != "/" and efechareservacion.get()[0:2].isdigit() == True and efechareservacion.get()[3:5].isdigit() == True and efechareservacion.get()[6:10].isdigit() == True:
+            messagebox.showerror("Error", "La fecha de reservacion debe tener el formato dd/mm/aaaa")
+
+        #Condicional para verificar que la fecha de reservacion sea valida teniendo en cuenta los dias de cada mes
+        elif int(efechareservacion.get()[0:2]) > 31 or int(efechareservacion.get()[3:5]) > 12 or int(efechareservacion.get()[6:10]) < 2023 or (int(efechareservacion.get()[3:5]) == 2 and int(efechareservacion.get()[0:2]) > 28) or ((int(efechareservacion.get()[3:5]) == 4 or int(efechareservacion.get()[3:5]) == 6 or int(efechareservacion.get()[3:5]) == 9 or int(efechareservacion.get()[3:5]) == 11) and int(efechareservacion.get()[0:2]) > 30) or int(efechareservacion.get()[0:2]) < 1 or int(efechareservacion.get()[3:5]) < 1 or int(efechareservacion.get()[6:10]) < 1 or (int(efechareservacion.get()[0:2]) <= now.day and int(efechareservacion.get()[3:5]) <= now.month and int(efechareservacion.get()[6:10]) <= now.year):
+            messagebox.showerror("Error", "La fecha de reservacion debe ser valida")
+
+        #Condicional para verificar que la hora de reservacion sea valida
+        elif ehorareservacion.get()[2] != ":" and ehorareservacion.get()[0:2].isdigit() == True and ehorareservacion.get()[3:5].isdigit() == True:
+            messagebox.showerror("Error", "La hora de reservacion debe tener el formato hh:mm")
+
+        #Condicional para verificar que la hora de reservacion sea valida teniendo en cuenta los minutos
+        elif int(ehorareservacion.get()[0:2]) > 23 or int(ehorareservacion.get()[3:5]) > 59 or int(ehorareservacion.get()[0:2]) < 0 or int(ehorareservacion.get()[3:5]) < 0:
+            messagebox.showerror("Error", "La hora de reservacion debe ser valida")
+
+        else:
+            #Condicional para verificar si la reservacion de la mesa ya existe
+            for i in range(len(lmesas)):
+                if lmesas[i][0] == enumeromesa.get():
+                    messagebox.showerror("Error", "La mesa ya esta reservada")
+                    bandera = True
+                    break
+                    
+                else:
+                    bandera = False
+
+            #Excepcion para cuando la reservacion de la mesa no existe
+            if bandera == False:
+                #Se agrega la mesa a la base de datos
+                tlmesas.append(enumeromesa.get())
+                tlmesas.append(efechareservacion.get())
+                tlmesas.append(ehorareservacion.get())
+                tlmesas.append(enumeropersonas.get())
+
+                lmesas.append(tlmesas)
+
+                #Se guarda la base de datos de mesas
+                txtmesas = open(mlist, "w")
+                txtmesas.write(str(lmesas))
+                txtmesas.close()
+
+                messagebox.showinfo("Agregado", "Mesa agregada con exito")
+                gestionmesas()
+
+    #Excepcion para cuando la fecha o la hora de reservacion no tienen el formato correcto
+    except IndexError:
+        messagebox.showerror("Error", "La fecha o la hora de reservacion no tienen el formato correcto")
+
+#Funcion para eliminar mesa
+def seliminarmesa():
+    #Condicional para verificar si se selecciono una mesa
+    if lbnmesas.curselection() != ():
+        #Se elimina la mesa de la base de datos
+        lmesas.pop(lbnmesas.curselection()[0])
+
+        #Se eliminan las mesas de los listbox
+        lbnmesas.delete(lbnmesas.curselection())
+        lbfrmesas.delete(lbfrmesas.curselection())
+        lbhrmesas.delete(lbhrmesas.curselection())
+        lbnpmesas.delete(lbnpmesas.curselection())
+
+        #Se guarda la base de datos de mesas
+        txtmesas = open(mlist, "w")
+        txtmesas.write(str(lmesas))
+        txtmesas.close()
+
+        messagebox.showinfo("Eliminado", "Mesa eliminada con exito")
+
+#Funcion para actualizar mesa
+def sactualizarmesa():
+    global lmesas
+
+    #Lista temporal de mesas
+    tlmesas = []
+
+    bandera = False
+
+    #Condicional para verificar si los campos estan vacios
+    if eanumeromesa.get() == "" or eafechareservacion.get() == "" or eahorareservacion.get() == "" or eanumeropersonas.get() == "":
+        messagebox.showerror("Error", "No se pueden dejar campos vacios")
+
+    #Condicional para verificar si el numero de mesa es un numero
+    elif eanumeromesa.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de mesa solo puede ser un numero y no puede ser negativo")
+
+    #Condicional para verificar si el numero de personas es un numero
+    elif eanumeropersonas.get().isdigit() == False:
+        messagebox.showerror("Error", "El numero de personas solo puede ser un numero y no puede ser negativo")
+
+    #Condicional para validar fecha y hora
+    try:
+        #Condicional para verificar que la fecha de reservacion sea valida
+        if eafechareservacion.get()[2] != "/" and eafechareservacion.get()[5] != "/" and eafechareservacion.get()[0:2].isdigit() == True and eafechareservacion.get()[3:5].isdigit() == True and eafechareservacion.get()[6:10].isdigit() == True:
+            messagebox.showerror("Error", "La fecha de reservacion debe tener el formato dd/mm/aaaa")
+
+        #Condicional para verificar que la fecha de reservacion sea valida teniendo en cuenta los dias de cada mes
+        elif int(eafechareservacion.get()[0:2]) > 31 or int(eafechareservacion.get()[3:5]) > 12 or int(eafechareservacion.get()[6:10]) < 2023 or (int(eafechareservacion.get()[3:5]) == 2 and int(eafechareservacion.get()[0:2]) > 28) or ((int(eafechareservacion.get()[3:5]) == 4 or int(eafechareservacion.get()[3:5]) == 6 or int(eafechareservacion.get()[3:5]) == 9 or int(eafechareservacion.get()[3:5]) == 11) and int(eafechareservacion.get()[0:2]) > 30) or int(eafechareservacion.get()[0:2]) < 0 or int(eafechareservacion.get()[3:5]) < 0 or int(eafechareservacion.get()[6:10]) < 0 or (int(eafechareservacion.get()[0:2]) <= now.day and int(eafechareservacion.get()[3:5]) <= now.month and int(eafechareservacion.get()[6:10]) <= now.year):
+            messagebox.showerror("Error", "La fecha de reservacion debe ser valida")
+
+        #Condicional para verificar que la hora de reservacion sea valida
+        elif eahorareservacion.get()[2] != ":" and eahorareservacion.get()[0:2].isdigit() == True and eahorareservacion.get()[3:5].isdigit() == True:
+            messagebox.showerror("Error", "La hora de reservacion debe tener el formato hh:mm")
+
+        #Condicional para verificar que la hora de reservacion sea valida teniendo en cuenta los minutos
+        elif int(eahorareservacion.get()[0:2]) > 23 or int(eahorareservacion.get()[3:5]) > 59 or int(eahorareservacion.get()[0:2]) < 0 or int(eahorareservacion.get()[3:5]) < 0:
+            messagebox.showerror("Error", "La hora de reservacion debe ser valida")
+
+        else:
+            #Condicional para verificar si la reservacion de la mesa ya existe
+            tlmesas.append(eanumeromesa.get())
+            tlmesas.append(eafechareservacion.get())
+            tlmesas.append(eahorareservacion.get())
+            tlmesas.append(eanumeropersonas.get())
+
+            for i in range(len(lmesas)):
+                if lmesas[i][0] == eanumeromesa.get() and lmesas[i] == tlmesas:
+                    messagebox.showerror("Error", "La mesa ya esta reservada")
+                    bandera = True
+                    break
+                
+                else:
+                    if bandera == False:
+                        for j in range(len(lmesas)):
+                            if lmesas[j][0] == eanumeromesa.get() and j != lbnmesas.curselection()[0]:
+                                messagebox.showerror("Error", "La mesa ya esta reservada")
+                                bandera = True
+                                break
+                            else:
+                                bandera = False
+
+            if bandera == False:
+                lmesas.pop(lbnmesas.curselection()[0])
+                lmesas.insert(lbnmesas.curselection()[0], tlmesas)
+
+                #Se guarda la base de datos de mesas
+                txtmesas = open(mlist, "w")
+                txtmesas.write(str(lmesas))
+                txtmesas.close()
+
+                messagebox.showinfo("Actualizado", "Mesa actualizada con exito")
+
+                eliminaractualizarmesa()
+
+    #Excepcion para cuando la fecha o la hora de reservacion no tienen el formato correcto
+    except IndexError:
+        messagebox.showerror("Error", "La fecha o la hora de reservacion no tienen el formato correcto")
+
+#Funciones para seleccionar lineas de listbox de mesas
+def selneliminarmesa():
+    lbfrmesas.selection_clear(0, END)
+    lbhrmesas.selection_clear(0, END)
+    lbnpmesas.selection_clear(0, END)
+
+    lbfrmesas.selection_set(lbnmesas.curselection())
+    lbhrmesas.selection_set(lbnmesas.curselection())
+    lbnpmesas.selection_set(lbnmesas.curselection())
+
+def selfreliminarmesa():
+    lbnmesas.selection_clear(0, END)
+    lbhrmesas.selection_clear(0, END)
+    lbnpmesas.selection_clear(0, END)
+
+    lbnmesas.selection_set(lbfrmesas.curselection())
+    lbhrmesas.selection_set(lbfrmesas.curselection())
+    lbnpmesas.selection_set(lbfrmesas.curselection())
+
+def selhreliminarmesa():
+    lbnmesas.selection_clear(0, END)
+    lbfrmesas.selection_clear(0, END)
+    lbnpmesas.selection_clear(0, END)
+
+    lbnmesas.selection_set(lbhrmesas.curselection())
+    lbfrmesas.selection_set(lbhrmesas.curselection())
+    lbnpmesas.selection_set(lbhrmesas.curselection())
+
+def selnpeliminarmesa():
+    lbnmesas.selection_clear(0, END)
+    lbfrmesas.selection_clear(0, END)
+    lbhrmesas.selection_clear(0, END)
+
+    lbnmesas.selection_set(lbnpmesas.curselection())
+    lbfrmesas.selection_set(lbnpmesas.curselection())
+    lbhrmesas.selection_set(lbnpmesas.curselection())
+
 #Funcion para volver a la pantalla anterior
 def back():
     global pstate
@@ -479,7 +864,9 @@ def back():
     if pstate == 1:
         #Variable del estado del programa en el valor de pagina principal
         pstate = 0
-    
+
+        root.title(mrtitle)
+
         #Se reinician los entrys
         eluser.delete(0, END)
         elpassword.delete(0, END)
@@ -493,6 +880,10 @@ def back():
         main.hide(fagregarplato)
         main.hide(feliminaractualizarplato)
         main.hide(factualizarplato)
+        main.hide(fgestionmesas)
+        main.hide(fagregarmesa)
+        main.hide(feliminaractualizarmesa)
+        main.hide(factualizarmesa)
         main.grid_remove()
 
         #Se agrega la pantalla principal
@@ -531,6 +922,31 @@ def back():
     elif pstate == 7:
         pstate = 6
 
+    #Condicional para volver a la pantalla de menu principal
+    elif pstate == 8:
+        #Se reinician los entrys
+        enumeromesa.delete(0, END)
+        efechareservacion.delete(0, END)
+        ehorareservacion.delete(0, END)
+        enumeropersonas.delete(0, END)
+
+        #Se vuelve a la pantalla de menu principal
+        gestionmesas()
+        pstate = 3
+
+    #Condicional para volver a la pantalla de gestion de mesas
+    elif pstate == 9:
+        pstate = 8
+
+    elif pstate == 10:
+        #Se vuelve a la pantalla de eliminar o actualizar mesas
+        eliminaractualizarmesa()
+        pstate = 8
+
+    #Condicional para volver a la pantalla de eliminar o actualizar mesas
+    elif pstate == 11:
+        pstate = 10
+
 #Funcion para definir la pantalla principal
 def pmainmenu():
     #Variables globales
@@ -559,10 +975,10 @@ def pmainmenu():
     ftcmspace = Frame(fmainmenu, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
 
     #Se crea el boton de registro de la pantalla principal
-    bregist = Button(fmainmenu, text = "Registrarse", font = (ftitle, int(fsize / 2), "bold"), command = regist, height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bregist = Button(fmainmenu, text = rtitle, font = (ftitle, int(fsize / 2), "bold"), command = regist, height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
     #Se crea el boton de login de la pantalla principal
-    blogin = Button(fmainmenu, text = "Iniciar sesion", font = (ftitle, int(fsize / 2), "bold"), command = login, height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    blogin = Button(fmainmenu, text = ltitle, font = (ftitle, int(fsize / 2), "bold"), command = login, height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
     #Se crea el frame de espacio superior derecho de la pantalla principal
     ftrmspace = Frame(fmainmenu, width = ssize[0] * 0.05, height = ssize[0] * 0.05, bg = bgcolor)
@@ -605,7 +1021,7 @@ def plogin():
     ltlogin = Label(fltext, text = " ", font = (ftitle, int(fsize / 5), "bold"), bg = bgcolor)
 
     #Se crea el boton de iniciar sesion de la pantalla de login
-    bslogin = Button(fltext, text = "Iniciar sesion", command = slogin, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
+    bslogin = Button(fltext, text = ltitle, command = slogin, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
 
     #Se crea el frame de espacio superior derecho de la pantalla de login
     ftrlspace = Frame(flogin, width = ssize[0] * 0.39, height = ssize[0] * 0.05, bg = bgcolor)
@@ -657,7 +1073,7 @@ def pregist():
     ltregist = Label(frtext, text = " ", font = (ftitle, int(fsize / 5), "bold"), bg = bgcolor)
 
     #Se crea el boton de registrarse de la pantalla de registro
-    bsregist = Button(frtext, text = "Registrarse", command = sregist, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
+    bsregist = Button(frtext, text = rtitle, command = sregist, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.002), width = int(ssize[0] * 0.009))
 
     #Se crea el frame de espacio superior derecho de la pantalla de registro
     ftrrspace = Frame(fregist, width = ssize[0] * 0.39, height = ssize[0] * 0.05, bg = bgcolor)
@@ -697,7 +1113,7 @@ def pwelcome():
     lwelcomemessage = Label(fwtext, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea el boton de gestion de platos
-    bwgestionplatos = Button(fwtext, text = "Gestion de platos", command = gestionplatos, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bwgestionplatos = Button(fwtext, text = gptitle, command = gestionplatos, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
     #Se crea el boton de gestion de mesas
     bwgestionmesas = Button(fwtext, text = "Gestion de mesas", command = gestionmesas, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
@@ -734,13 +1150,13 @@ def pgestionplatos():
     fgptext = Frame(fgestionplatos, bg = bgcolor)
 
     #Se crea el label de gestion de platos
-    lgestionplatos = Label(fgptext, text = "Gestion de platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+    lgestionplatos = Label(fgptext, text = gptitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea el boton de agregar plato
-    bgpagregarplato = Button(fgptext, text = "Agregar plato", command = agregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    bgpagregarplato = Button(fgptext, text = aptitle, command = agregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
-    #Se crea el boton de eliminar plato
-    bgpeliminaractualizarplato = Button(fgptext, text = "Eliminar o actualizar plato", command = eliminaractualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+    #Se crea el boton de eliminar o actualizar plato
+    bgpeliminaractualizarplato = Button(fgptext, text = eaptitle, command = eliminaractualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
 
 #Funcion para definir la pantalla de agregar plato
 def pagregarplato():
@@ -768,7 +1184,7 @@ def pagregarplato():
     faptext = Frame(fagregarplato, bg = bgcolor)
 
     #Se crea el label de agregar plato
-    lagregarplato = Label(faptext, text = "Agregar plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+    lagregarplato = Label(faptext, text = aptitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea label de nombre de plato
     lnombreplato = Label(faptext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
@@ -795,11 +1211,11 @@ def pagregarplato():
     edisponibilidadplato = Entry(faptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
 
     #Se crea el boton de agregar plato
-    bagregarplato = Button(faptext, text = "Agregar plato", command = sagregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+    bagregarplato = Button(faptext, text = aptitle, command = sagregarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
 #Funcion para definir la pantalla de eliminar o actualizar plato
 def peliminaractualizarplato():
-    global logosmall, feliminaractualizarplato, lieliminaractualizarplatotitle, leliminaractualizarplatotitle, featext, leliminaractualizarplato, beliminarplato, bactualizarplato, lbnplatos, lbpplatos, lbdesplatos, lbdplatos, lnplatos, lpplatos, ldesplatos, ldplatos
+    global logosmall, feliminaractualizarplato, lieliminaractualizarplatotitle, leliminaractualizarplatotitle, feaptext, leliminaractualizarplato, beliminarplato, bactualizarplato, lbnplatos, lbpplatos, lbdesplatos, lbdplatos, lnplatos, lpplatos, ldesplatos, ldplatos
 
     #Se crea la pantalla de eliminar o actualizar plato
     feliminaractualizarplato = Frame(main, bg = bgcolor)
@@ -808,44 +1224,44 @@ def peliminaractualizarplato():
     logosmall = ImageTk.PhotoImage(ico.resize((int(ssize[0] * 0.05), int(ssize[0] * 0.05 * logoar))))
     lieliminaractualizarplatotitle = Label(feliminaractualizarplato, image = logosmall, bg = bgcolor)
 
-    #Se crea el frame de espacio superior izquierdo de la pantalla de eliminar o actualizar plato
+    #Se crea el frame de titulo de la pantalla de eliminar o actualizar plato
     leliminaractualizarplatotitle = Label(feliminaractualizarplato, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
 
     #Se crea el boton de eliminar plato
     beliminarplato = Button(feliminaractualizarplato, bg = "red", text = "Eliminar plato", command = seliminarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
     #Se crea el boton de actualizar plato
-    bactualizarplato = Button(feliminaractualizarplato, text = "Actualizar plato", command = actualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+    bactualizarplato = Button(feliminaractualizarplato, text = acptitle, command = actualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
     #Se crea el frame de ubicacion de los elementos de la pantalla de eliminar o actualizar plato
-    featext = Frame(feliminaractualizarplato, bg = bgcolor)
+    feaptext = Frame(feliminaractualizarplato, bg = bgcolor)
 
     #Se crea el label de eliminar o actualizar plato
-    leliminaractualizarplato = Label(featext, text = "Platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+    leliminaractualizarplato = Label(feaptext, text = "Platos", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea label del listbox de nombre de platos
-    lnplatos = Label(featext, text = "Nombre", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+    lnplatos = Label(feaptext, text = "Nombre", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
 
     #Se crea el listbox del nombre de los platos
-    lbnplatos = Listbox(featext, exportselection = 0,font = (ftitle, int(fsize / 3), "bold"))
+    lbnplatos = Listbox(feaptext, exportselection = 0,font = (ftitle, int(fsize / 3), "bold"))
 
     #Se crea label del listbox de precio de platos
-    lpplatos = Label(featext, text = "Precio", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+    lpplatos = Label(feaptext, text = "Precio", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
 
     #Se crea el listbox del precio de los platos
-    lbpplatos = Listbox(featext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+    lbpplatos = Listbox(feaptext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
 
     #Se crea label del listbox de descripcion de platos
-    ldesplatos = Label(featext, text = "Descripcion", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+    ldesplatos = Label(feaptext, text = "Descripcion", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
 
     #Se crea el listbox de la descripcion de los platos
-    lbdesplatos = Listbox(featext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+    lbdesplatos = Listbox(feaptext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
 
     #Se crea label del listbox de disponibilidad de platos
-    ldplatos = Label(featext, text = "Disponibilidad", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+    ldplatos = Label(feaptext, text = "Disponibilidad", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
 
     #Se crea el listbox de la disponibilidad de los platos
-    lbdplatos = Listbox(featext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+    lbdplatos = Listbox(feaptext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
 
 #Funcion para definir la pantalla de actualizar plato
 def pactualizarplato():
@@ -873,7 +1289,7 @@ def pactualizarplato():
     facptext = Frame(factualizarplato, bg = bgcolor)
 
     #Se crea el label de actualizar plato
-    lactualizarplato = Label(facptext, text = "Actualizar plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+    lactualizarplato = Label(facptext, text = acptitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea label de nombre de plato
     lanombreplato = Label(facptext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
@@ -900,7 +1316,200 @@ def pactualizarplato():
     eadisponibilidadplato = Entry(facptext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
 
     #Se crea el boton de actualizar plato
-    baactualizarplato = Button(facptext, text = "Actualizar plato", command = sactualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+    baactualizarplato = Button(facptext, text = acptitle, command = sactualizarplato, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+#Funcion para definir la pantalla de gestion de mesas
+def pgestionmesas():
+    global fgestionmesas, ftlgmspace, ftcgmspace, ftrgmspace, lgestionmesastitle, ligestionmesastitle, fgmtext, lgestionmesas, bgmagregarmesa, bgmeliminaractualizarmesa
+
+    #Se crea la pantalla de gestion de mesas
+    fgestionmesas = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de gestion de mesas
+    ftlgmspace = Frame(fgestionmesas, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de gestion de mesas
+    lgestionmesastitle = Label(fgestionmesas, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de gestion de mesas
+    ligestionmesastitle = Label(fgestionmesas, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de gestion de mesas
+    ftcgmspace = Frame(fgestionmesas, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de gestion de mesas
+    ftrgmspace = Frame(fgestionmesas, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de gestion de mesas
+    fgmtext = Frame(fgestionmesas, bg = bgcolor)
+
+    #Se crea el label de gestion de mesas
+    lgestionmesas = Label(fgmtext, text = "Gestion de mesas", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el boton de agregar mesa
+    bgmagregarmesa = Button(fgmtext, text = "Agregar mesa", command = agregarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+    #Se crea el boton de eliminar o actualizar mesa
+    bgmeliminaractualizarmesa = Button(fgmtext, text = "Eliminar o actualizar mesa", command = eliminaractualizarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.005), width = int(ssize[0] * bwregist))
+
+#Funcion para definir la pantalla de agregar mesa
+def pagregarmesa():
+    global fagregarmesa, ftlagmspace, lagregarmesatitle, liagregarmesatitle, ftcagmspace, ftragmspace, fagmtext, lagregarmesa, lnumeromesa, enumeromesa, lfechareservacion, efechareservacion, lhorareservacion, ehorareservacion, lnumeropersonas, enumeropersonas, bagregarmesa
+
+    #Se crea la pantalla de agregar mesa
+    fagregarmesa = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de agregar mesa
+    ftlagmspace = Frame(fagregarmesa, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de agregar mesa
+    lagregarmesatitle = Label(fagregarmesa, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de agregar mesa
+    liagregarmesatitle = Label(fagregarmesa, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de agregar mesa
+    ftcagmspace = Frame(fagregarmesa, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de agregar mesa
+    ftragmspace = Frame(fagregarmesa, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de agregar mesa
+    fagmtext = Frame(fagregarmesa, bg = bgcolor)
+
+    #Se crea el label de agregar mesa
+    lagregarmesa = Label(fagmtext, text = "Agregar mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label de numero de mesa
+    lnumeromesa = Label(fagmtext, text = "Numero de mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de mesa
+    enumeromesa = Entry(fagmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de fecha de la reservacion
+    lfechareservacion = Label(fagmtext, text = "Fecha de la reservacion: dd/mm/aaaa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de fecha de la reservacion
+    efechareservacion = Entry(fagmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de hora de la reservacion
+    lhorareservacion = Label(fagmtext, text = "Hora de la reservacion: hh:mm", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de hora de la reservacion
+    ehorareservacion = Entry(fagmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de numero de personas
+    lnumeropersonas = Label(fagmtext, text = "Numero de personas", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de personas
+    enumeropersonas = Entry(fagmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el boton de agregar mesa
+    bagregarmesa = Button(fagmtext, text = "Agregar mesa", command = sagregarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+#Funcion para definir la pantalla de eliminar o actualizar mesa
+def peliminaractualizarmesa():
+    global feliminaractualizarmesa, lieliminaractualizarmesatitle, leliminaractualizarmesatitle, feamtext, leliminaractualizarmesa, beliminarmesa, bactualizarmesa, lbnmesas, lbfrmesas, lbhrmesas, lbnpmesas, lnmesas, lfrmesas, lhrmesas, lnpmesas
+
+    #Se crea la pantalla de eliminar o actualizar mesa
+    feliminaractualizarmesa = Frame(main, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de eliminar o actualizar mesa
+    lieliminaractualizarmesatitle = Label(feliminaractualizarmesa, image = logosmall, bg = bgcolor)
+
+    #Se crea el frame de titulo de la pantalla de eliminar o actualizar mesa
+    leliminaractualizarmesatitle = Label(feliminaractualizarmesa, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el boton de eliminar mesa
+    beliminarmesa = Button(feliminaractualizarmesa, bg = "red", text = "Eliminar mesa", command = seliminarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+    #Se crea el boton de actualizar mesa
+    bactualizarmesa = Button(feliminaractualizarmesa, text = acmtitle, command = actualizarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de eliminar o actualizar mesa
+    feamtext = Frame(feliminaractualizarmesa, bg = bgcolor)
+
+    #Se crea el label de eliminar o actualizar mesa
+    leliminaractualizarmesa = Label(feamtext, text = "Mesas", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label del listbox de numero de mesas
+    lnmesas = Label(feamtext, text = "Numero", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox del numero de las mesas
+    lbnmesas = Listbox(feamtext, exportselection = 0,font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea label del listbox de fecha de reservacion de mesas
+    lfrmesas = Label(feamtext, text = "Fecha de reservacion", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox de la fecha de reservacion de las mesas
+    lbfrmesas = Listbox(feamtext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea label del listbox de hora de reservacion de mesas
+    lhrmesas = Label(feamtext, text = "Hora de reservacion", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox de la hora de reservacion de las mesas
+    lbhrmesas = Listbox(feamtext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+
+    #Se crea label del listbox de numero de personas de mesas
+    lnpmesas = Label(feamtext, text = "Numero de personas", font = (ftitle, int(fsize / 3), "bold"), relief = "raised")
+
+    #Se crea el listbox del numero de personas de las mesas
+    lbnpmesas = Listbox(feamtext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
+
+#Funcion para definir la pantalla de actualizar mesa
+def pactualizarmesa():
+    global factualizarmesa, ftlacmspace, lactualizarmesatitle, liactualizarmesatitle, ftcacmspace, ftracmspace, facmtext, lactualizarmesa, lanumeromesa, eanumeromesa, lafechareservacion, eafechareservacion, lahorareservacion, eahorareservacion, lanumeropersonas, eanumeropersonas, baactualizarmesa
+
+    #Se crea la pantalla de actualizar mesa
+    factualizarmesa = Frame(main, bg = bgcolor)
+
+    #Se crea el frame de espacio superior izquierdo de la pantalla de actualizar mesa
+    ftlacmspace = Frame(factualizarmesa, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el titulo de la pantalla de actualizar mesa
+    lactualizarmesatitle = Label(factualizarmesa, text = mrtitle, font = (ftitle, fsize, "bold"), fg = fctitle, bg = bgcolor)
+
+    #Se crea el logo de la pantalla de actualizar mesa
+    liactualizarmesatitle = Label(factualizarmesa, image = logo, bg = bgcolor)
+
+    #Se crea el frame de espacio superior central de la pantalla de actualizar mesa
+    ftcacmspace = Frame(factualizarmesa, width = ssize[0] * 0.11, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de espacio superior derecho de la pantalla de actualizar mesa
+    ftracmspace = Frame(factualizarmesa, width = ssize[0] * 0.16, height = ssize[0] * 0.05, bg = bgcolor)
+
+    #Se crea el frame de ubicacion de los elementos de la pantalla de actualizar mesa
+    facmtext = Frame(factualizarmesa, bg = bgcolor)
+
+    #Se crea el label de actualizar mesa
+    lactualizarmesa = Label(facmtext, text = acmtitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label de numero de mesa
+    lanumeromesa = Label(facmtext, text = "Numero de mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de mesa
+    eanumeromesa = Entry(facmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de fecha de la reservacion
+    lafechareservacion = Label(facmtext, text = "Fecha de la reservacion: dd/mm/aaaa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de fecha de la reservacion
+    eafechareservacion = Entry(facmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de hora de la reservacion
+    lahorareservacion = Label(facmtext, text = "Hora de la reservacion: hh:mm", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de hora de la reservacion
+    eahorareservacion = Entry(facmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el label de numero de personas
+    lanumeropersonas = Label(facmtext, text = "Numero de personas", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea el entry de numero de personas
+    eanumeropersonas = Entry(facmtext, font = (ftitle, int(fsize / 3), "bold"), width = int(ssize[0] * 0.04))
+
+    #Se crea el boton de actualizar mesa
+    baactualizarmesa = Button(facmtext, text = acmtitle, command = sactualizarmesa, font = (ftitle, int(fsize / 2), "bold"), height = int(ssize[1] * 0.001), width = int(ssize[0] * 0.01))
 
 #Funcion para posicionar la pantalla principal
 def pospprincipal():
@@ -1160,7 +1769,7 @@ def poseliminaractualizarplato():
     bactualizarplato.grid(row = 0, column = 3)
 
     #Posicionamiento del frame de ubicacion de los elementos de la pantalla de eliminar o actualizar plato
-    featext.grid(row = 1, column = 0, columnspan = 4)
+    feaptext.grid(row = 1, column = 0, columnspan = 4)
 
     #Posicionamiento del label de eliminar o actualizar plato
     leliminaractualizarplato.grid(row = 0, column = 0, columnspan = 4)
@@ -1239,18 +1848,191 @@ def posactualizarplato():
     #Posicionamiento del frame de espacio superior derecho de la pantalla de actualizar plato
     ftracpspace.grid(row = 0, column = 4)
 
+#Funcion para posicionar la pantalla de gestion de mesas
+def posgestionmesas():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de gestion de mesas
+    ftlgmspace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de gestion de mesas
+    lgestionmesastitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de gestion de mesas
+    ligestionmesastitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de gestion de mesas
+    ftcgmspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de gestion de mesas
+    fgmtext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de gestion de mesas
+    lgestionmesas.grid(row = 0, column = 0)
+
+    #Posicionamiento del boton de agregar mesa
+    bgmagregarmesa.grid(row = 1, column = 0)
+
+    #Posicionamiento del boton de eliminar o actualizar mesa
+    bgmeliminaractualizarmesa.grid(row = 2, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de gestion de mesas
+    ftrgmspace.grid(row = 0, column = 4)
+
+#Funcion para posicionar la pantalla de agregar mesa
+def posagregarmesa():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de agregar mesa
+    ftlagmspace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de agregar mesa
+    lagregarmesatitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de agregar mesa
+    liagregarmesatitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de agregar mesa
+    ftcagmspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de agregar mesa
+    fagmtext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de agregar mesa
+    lagregarmesa.grid(row = 0, column = 0)
+
+    #Posicionamiento del label de numero de mesa
+    lnumeromesa.grid(row = 1, column = 0)
+
+    #Posicionamiento del entry de numero de mesa
+    enumeromesa.grid(row = 2, column = 0)
+
+    #Posicionamiento del label de fecha de la reservacion
+    lfechareservacion.grid(row = 3, column = 0)
+
+    #Posicionamiento del entry de fecha de la reservacion
+    efechareservacion.grid(row = 4, column = 0)
+
+    #Posicionamiento del label de hora de la reservacion
+    lhorareservacion.grid(row = 5, column = 0)
+
+    #Posicionamiento del entry de hora de la reservacion
+    ehorareservacion.grid(row = 6, column = 0)
+
+    #Posicionamiento del label de numero de personas
+    lnumeropersonas.grid(row = 7, column = 0)
+
+    #Posicionamiento del entry de numero de personas
+    enumeropersonas.grid(row = 8, column = 0)
+
+    #Posicionamiento del boton de agregar mesa
+    bagregarmesa.grid(row = 9, column = 0)
+
+#Funcion para posicionar la pantalla de eliminar o actualizar mesa
+def poseliminaractualizarmesa():
+    #Posicionamiento del logo de la pantalla de eliminar o actualizar mesa
+    lieliminaractualizarmesatitle.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de eliminar o actualizar mesa
+    leliminaractualizarmesatitle.grid(row = 0, column = 1)
+
+    #Posicionamiento del boton de eliminar mesa
+    beliminarmesa.grid(row = 0, column = 2, padx = (int(ssize[0] * 0.4), 0))
+
+    #Posicionamiento del boton de actualizar mesa
+    bactualizarmesa.grid(row = 0, column = 3)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de eliminar o actualizar mesa
+    feamtext.grid(row = 1, column = 0, columnspan = 4)
+
+    #Posicionamiento del label de eliminar o actualizar mesa
+    leliminaractualizarmesa.grid(row = 0, column = 0, columnspan = 4)
+
+    #Posicionamiento del label del listbox de numero de mesas
+    lnmesas.grid(row = 1, column = 0)
+
+    #Posicionamiento del listbox del numero de las mesas
+    lbnmesas.grid(row = 2, column = 0)
+
+    #Posicionamiento del label del listbox de fecha de reservacion de mesas
+    lfrmesas.grid(row = 1, column = 1)
+
+    #Posicionamiento del listbox de la fecha de reservacion de las mesas
+    lbfrmesas.grid(row = 2, column = 1)
+
+    #Posicionamiento del label del listbox de hora de reservacion de mesas
+    lhrmesas.grid(row = 1, column = 2)
+
+    #Posicionamiento del listbox de la hora de reservacion de las mesas
+    lbhrmesas.grid(row = 2, column = 2)
+
+    #Posicionamiento del label del listbox de numero de personas de mesas
+    lnpmesas.grid(row = 1, column = 3)
+
+    #Posicionamiento del listbox del numero de personas de las mesas
+    lbnpmesas.grid(row = 2, column = 3)
+
+#Funcion para posicionar la pantalla de actualizar mesa
+def posactualizarmesa():
+    #Posicionamiento del frame de espacio superior izquierdo de la pantalla de actualizar mesa
+    ftlacmspace.grid(row = 0, column = 0)
+
+    #Posicionamiento del titulo de la pantalla de actualizar mesa
+    lactualizarmesatitle.grid(row = 1, column = 1)
+
+    #Posicionamiento del logo de la pantalla de actualizar mesa
+    liactualizarmesatitle.grid(row = 2, column = 1)
+
+    #Posicionamiento del frame de espacio superior central de la pantalla de actualizar mesa
+    ftcacmspace.grid(row = 0, column = 2)
+
+    #Posicionamiento del frame de ubicacion de los elementos de la pantalla de actualizar mesa
+    facmtext.grid(row = 2, column = 3)
+
+    #Posicionamiento del label de actualizar mesa
+    lactualizarmesa.grid(row = 0, column = 0)
+
+    #Posicionamiento del label de numero de mesa
+    lanumeromesa.grid(row = 1, column = 0)
+
+    #Posicionamiento del entry de numero de mesa
+    eanumeromesa.grid(row = 2, column = 0)
+
+    #Posicionamiento del label de fecha de la reservacion
+    lafechareservacion.grid(row = 3, column = 0)
+
+    #Posicionamiento del entry de fecha de la reservacion
+    eafechareservacion.grid(row = 4, column = 0)
+
+    #Posicionamiento del label de hora de la reservacion
+    lahorareservacion.grid(row = 5, column = 0)
+
+    #Posicionamiento del entry de hora de la reservacion
+    eahorareservacion.grid(row = 6, column = 0)
+
+    #Posicionamiento del label de numero de personas
+    lanumeropersonas.grid(row = 7, column = 0)
+
+    #Posicionamiento del entry de numero de personas
+    eanumeropersonas.grid(row = 8, column = 0)
+
+    #Posicionamiento del boton de actualizar mesa
+    baactualizarmesa.grid(row = 9, column = 0)
+
+    #Posicionamiento del frame de espacio superior derecho de la pantalla de actualizar mesa
+    ftracmspace.grid(row = 0, column = 4)
+
 #Funcion para posicionar las pestañas
 def pospestañas():
     #Se agregan las pestañas
-    main.add(finicio, text = "Inicio")
-    main.add(flogin, text = "Iniciar sesion")
-    main.add(fregist, text = "Registrarse")
-    main.add(fwelcome, text = "Menu principal")
-    main.add(fgestionplatos, text = "Gestion de platos")
-    main.add(fagregarplato, text = "Agregar plato")
-    main.add(feliminaractualizarplato, text = "Eliminar o actualizar plato")
-    main.add(factualizarplato, text = "Actualizar plato")
-    #main.add(fgestionmesas, text = "Gestion de mesas")
+    main.add(finicio, text = ititle)
+    main.add(flogin, text = ltitle)
+    main.add(fregist, text = rtitle)
+    main.add(fwelcome, text = mptitle)
+    main.add(fgestionplatos, text = gptitle)
+    main.add(fagregarplato, text = aptitle)
+    main.add(feliminaractualizarplato, text = eaptitle)
+    main.add(factualizarplato, text = acptitle)
+    main.add(fgestionmesas, text = gmtitle)
+    main.add(fagregarmesa, text = amtitle)
+    main.add(feliminaractualizarmesa, text = eamtitle)
+    main.add(factualizarmesa, text = acmtitle)
     #main.add(fgestionpedidos, text = "Gestion de pedidos")
 
 #Funcion principal
@@ -1318,6 +2100,18 @@ def run():
     #ACTUALIZAR PLATO
     pactualizarplato()
 
+    #GESTION DE MESAS
+    pgestionmesas()
+
+    #AGREGAR MESA
+    pagregarmesa()
+
+    #ELIMINAR O ACTUALIZAR MESA
+    peliminaractualizarmesa()
+
+    #ACTUALIZAR MESA
+    pactualizarmesa()
+
     #Posicionamiento de las pestañas
     pospestañas()
 
@@ -1344,6 +2138,18 @@ def run():
 
     #Posicionamiento de la pantalla de actualizar plato
     posactualizarplato()
+
+    #Posicionamiento de la pantalla de gestion de mesas
+    posgestionmesas()
+
+    #Posicionamiento de la pantalla de agregar mesa
+    posagregarmesa()
+
+    #Posicionamiento de la pantalla de eliminar o actualizar mesa
+    poseliminaractualizarmesa()
+
+    #Posicionamiento de la pantalla de actualizar mesa
+    posactualizarmesa()
 
     #Bucle de la ventana
     root.mainloop()

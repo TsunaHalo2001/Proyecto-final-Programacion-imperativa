@@ -1,1 +1,1 @@
-[['arroz chaufa', '11000', 'Arroz con carne', 'si']]
+[['arroz chaufa', '11000', 'Arroz con carne', 'no'], ['arroz chaufa con pollo', '1', '1', 'si'], ['arroz chaufa con res', '1', '1', 'si']]
