@@ -462,7 +462,7 @@ def eliminaractualizarpedido():
     main.hide(factualizarpedido)
 
     if len(lpedidos) > 0:
-        #Se organiza la lista de numeros de pedidos
+        #Se organiza la lista de numeros de platos de pedidos
         for i in range(len(lpedidos)):
             snppedidos.append(lpedidos[i][0])
 
@@ -470,7 +470,7 @@ def eliminaractualizarpedido():
         for i in range(len(lpedidos)):
             snmpedidos.append(lpedidos[i][1])
 
-    #Se asigna el listado de numeros de pedidos
+    #Se asigna el listado de numeros de platos de pedidos
     lbnppedidos.delete(0, END)
     lbnppedidos.insert(0, *snppedidos)
 
@@ -495,6 +495,9 @@ def actualizarpedido():
         #Se selecciona la pestaña de agregar pedido
         main.select(factualizarpedido)
         
+        #Se asigna el plato actual al label de visualizacion
+        lpanombreplato.config(text = lplatos[int(lbnppedidos.get(lbnppedidos.curselection())) - 1][0].capitalize())
+
         #Se limpian los entrys
         epanumeromesa.delete(0, END)
         epanumeroplato.delete(0, END)
@@ -993,11 +996,19 @@ def sagregarpedido():
     elif epnumeroplato.get().isdigit() == False or epnumeromesa.get().isdigit() == False:
         messagebox.showerror("Error", "El numero de plato y el numero de mesa solo pueden ser numeros y no pueden ser negativos")
 
+    #Condicional para verificar que el numero de plato y el numero de mesa sean mayores a 0
+    elif int(epnumeroplato.get()) <= 0 or int(epnumeromesa.get()) <= 0:
+        messagebox.showerror("Error", "El numero de plato y el numero de mesa deben ser mayores a 0")
+
+    #Condicional para verificar si el numero de plato esta disponible
+    elif lplatos[int(epnumeroplato.get()) - 1][3] == "no":
+        messagebox.showerror("Error", "El plato no esta disponible")
+
     #Condicional para verificar si el numero de plato y el numero de mesa existen
     else:
         #Condicional para verificar si el numero de plato y el numero de mesa existen
         try:
-            lplatos[int(epnumeroplato.get())][0]
+            lplatos[int(epnumeroplato.get()) - 1][0]
             bandera = True
 
         except IndexError:
@@ -1030,6 +1041,25 @@ def sagregarpedido():
                 
         else:
             messagebox.showerror("Error", "El numero de plato o el numero de mesa no existen")
+
+#Funcion para actualizar label de plato en agregar
+def sagactualizarlabelplato():
+    #Condicional para verificar si el numero de plato es un numero
+    if epnumeroplato.get().isdigit() == True and epnumeroplato.get() != "" and int(epnumeroplato.get()) > 0:
+        #Condicional para verificar si el numero de plato existe
+        try:
+            lplatos[int(epnumeroplato.get()) - 1][0]
+            lpnombreplato.config(text = lplatos[int(epnumeroplato.get()) - 1][0].capitalize())
+
+        except IndexError:
+            lpnombreplato.config(text = "Plato no existe")
+
+    #Condicional para verificar si el plato esta disponible
+    elif lplatos[int(epnumeroplato.get()) - 1][3] == "no":
+        lpnombreplato.config(text = "Plato no esta disponible")
+
+    else:
+        lpnombreplato.config(text = "Plato no existe")
 
 #Funcion para eliminar pedido
 def seliminarpedido():
@@ -1066,11 +1096,19 @@ def sactualizarpedido():
     elif epanumeroplato.get().isdigit() == False or epanumeromesa.get().isdigit() == False:
         messagebox.showerror("Error", "El numero de plato y el numero de mesa solo pueden ser numeros y no pueden ser negativos")
 
+    #Condicional para verificar que el numero de plato y el numero de mesa sean mayores a 0
+    elif int(epanumeroplato.get()) <= 0 or int(epanumeromesa.get()) <= 0:
+        messagebox.showerror("Error", "El numero de plato y el numero de mesa deben ser mayores a 0")
+
+    #Condicional para verificar si el numero de plato esta disponible
+    elif lplatos[int(epanumeroplato.get()) - 1][3] == "no":
+        messagebox.showerror("Error", "El plato no esta disponible")
+
     #Condicional para verificar si el numero de plato y el numero de mesa existen
     else:
         #Condicional para verificar si el numero de plato y el numero de mesa existen
         try:
-            lplatos[int(epanumeroplato.get())][0]
+            lplatos[int(epanumeroplato.get()) - 1][0]
             bandera = True
 
         except IndexError:
@@ -1106,16 +1144,39 @@ def sactualizarpedido():
         else:
             messagebox.showerror("Error", "El numero de plato o el numero de mesa no existen")
 
+#Funcion para actualizar label de plato en actualizar
+def sapactualizarlabelplato():
+    #Condicional para verificar si el numero de plato es un numero
+    if epanumeroplato.get().isdigit() == True and epanumeroplato.get() != "" and int(epanumeroplato.get()) > 0:
+        #Condicional para verificar si el numero de plato existe
+        try:
+            lplatos[int(epanumeroplato.get()) - 1][0]
+            lpanombreplato.config(text = lplatos[int(epanumeroplato.get()) - 1][0].capitalize())
+
+        except IndexError:
+            lpanombreplato.config(text = "Plato no existe")
+
+    #Condicional para verificar si el plato esta disponible
+    elif lplatos[int(epanumeroplato.get()) - 1][3] == "no":
+        lpanombreplato.config(text = "Plato no esta disponible")
+
+    else:
+        lpanombreplato.config(text = "Plato no existe")
+
 #Funciones para seleccionar lineas de listbox de pedidos
 def selneliminarpedido():
     lbnmpedidos.selection_clear(0, END)
 
     lbnmpedidos.selection_set(lbnppedidos.curselection())
 
+    leapnombreplato.config(text = lplatos[int(lbnppedidos.get(lbnppedidos.curselection()[0])) - 1][0].capitalize())
+
 def selnpeliminarpedido():
     lbnppedidos.selection_clear(0, END)
 
     lbnppedidos.selection_set(lbnmpedidos.curselection())
+
+    leapnombreplato.config(text = lplatos[int(lbnppedidos.get(lbnppedidos.curselection()[0])) - 1][0].capitalize())
 
 #Funcion para volver a la pantalla anterior
 def back():
@@ -1861,7 +1922,7 @@ def pagregarpedido():
     lagregarpedido = Label(fagpetext, text = "Agregar pedido", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
 
     #Se crea label donde aparecera el plato segun el numero escrito
-    lpnombreplato = Label(fagpetext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor, relief = "raised")
+    lpnombreplato = Label(fagpetext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor, relief = "raised", width = int(ssize[0] * 0.02))
 
     #Se crea label de numero de plato
     lpnumeroplato = Label(fagpetext, text = "Numero de plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
@@ -1880,7 +1941,7 @@ def pagregarpedido():
 
 #Funcion para definir la pantalla de eliminar o actualizar pedido
 def peliminaractualizarpedido():
-    global feliminaractualizarpedido, lieliminaractualizarpedidotitle, leliminaractualizarpedidotitle, feapetext, leliminaractualizarpedido, beliminarpedido, bactualizarpedido, lbnppedidos, lnppedidos, lbnmpedidos, lnmpedidos
+    global feliminaractualizarpedido, lieliminaractualizarpedidotitle, leliminaractualizarpedidotitle, feapetext, leliminaractualizarpedido, beliminarpedido, bactualizarpedido, lbnppedidos, lnppedidos, lbnmpedidos, lnmpedidos, leapnombreplato
 
     #Se crea la pantalla de eliminar o actualizar pedido
     feliminaractualizarpedido = Frame(main, bg = bgcolor)
@@ -1915,9 +1976,12 @@ def peliminaractualizarpedido():
     #Se crea el listbox del numero de mesa
     lbnmpedidos = Listbox(feapetext, exportselection = 0, font = (ftitle, int(fsize / 3), "bold"))
 
+    #Se crea label de visualizacion de plato
+    leapnombreplato = Label(feapetext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor, relief = "raised", width = int(ssize[0] * 0.02))
+
 #Funcion para definir la pantalla de actualizar pedido
 def pactualizarpedido():
-    global factualizarpedido, ftlacpespace, lactualizarpedidotitle, liactualizarpedidotitle, ftcacpespace, ftracpespace, facpetext, lactualizarpedido, lpanumeromesa, epanumeromesa, lpanumeroplato, epanumeroplato, baactualizarpedido
+    global factualizarpedido, ftlacpespace, lactualizarpedidotitle, liactualizarpedidotitle, ftcacpespace, ftracpespace, facpetext, lactualizarpedido, lpanumeromesa, epanumeromesa, lpanumeroplato, epanumeroplato, baactualizarpedido, lpanombreplato
 
     #Se crea la pantalla de actualizar pedido
     factualizarpedido = Frame(main, bg = bgcolor)
@@ -1942,6 +2006,9 @@ def pactualizarpedido():
 
     #Se crea el label de actualizar pedido
     lactualizarpedido = Label(facpetext, text = acptitle, font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
+
+    #Se crea label donde aparecera el plato segun el numero escrito
+    lpanombreplato = Label(facpetext, text = "Nombre del plato", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor, relief = "raised", width = int(ssize[0] * 0.02))
 
     #Se crea label de numero de mesa
     lpanumeromesa = Label(facpetext, text = "Numero de mesa", font = (ftitle, int(fsize / 2), "bold"), bg = bgcolor)
@@ -2514,20 +2581,26 @@ def posagregarpedido():
     #Posicionamiento del label de agregar pedido
     lagregarpedido.grid(row = 0, column = 0)
 
+    #Posicionamiento del label de visualizacion de platos
+    lpnombreplato.grid(row = 1, column = 0)
+
     #Posicionamiento del label de numero de mesa
-    lpnumeromesa.grid(row = 1, column = 0)
+    lpnumeromesa.grid(row = 2, column = 0)
 
     #Posicionamiento del entry de numero de mesa
-    epnumeromesa.grid(row = 2, column = 0)
+    epnumeromesa.grid(row = 3, column = 0)
 
     #Posicionamiento del label de numero de plato
-    lpnumeroplato.grid(row = 3, column = 0)
+    lpnumeroplato.grid(row = 4, column = 0)
 
     #Posicionamiento del entry de numero de plato
-    epnumeroplato.grid(row = 4, column = 0)
+    epnumeroplato.grid(row = 5, column = 0)
+
+    #Se asigna un evento que al escribir en el entry de numero de plato, se actualice el label de visualizacion de platos
+    epnumeroplato.bind("<KeyRelease>", lambda event: sagactualizarlabelplato())
 
     #Posicionamiento del boton de agregar pedido
-    bagregarpedido.grid(row = 5, column = 0)
+    bagregarpedido.grid(row = 6, column = 0)
 
 #Funcion para posicionar la pantalla de eliminar o actualizar pedido
 def poseliminaractualizarpedido():
@@ -2561,6 +2634,9 @@ def poseliminaractualizarpedido():
     #Posicionamiento del listbox del numero de los platos
     lbnmpedidos.grid(row = 2, column = 1)
 
+    #Posicionamiento del label del nombre del plato
+    leapnombreplato.grid(row = 3, column = 0, columnspan = 4)
+
 #Funcion para posicionar la pantalla de actualizar pedido
 def posactualizarpedido():
     #Posicionamiento del frame de espacio superior izquierdo de la pantalla de actualizar pedido
@@ -2581,20 +2657,26 @@ def posactualizarpedido():
     #Posicionamiento del label de actualizar pedido
     lactualizarpedido.grid(row = 0, column = 0)
 
+    #Posicionamiento del label de visualizacion de platos
+    lpanombreplato.grid(row = 1, column = 0)
+
     #Posicionamiento del label de numero de mesa
-    lpanumeromesa.grid(row = 1, column = 0)
+    lpanumeromesa.grid(row = 2, column = 0)
 
     #Posicionamiento del entry de numero de mesa
-    epanumeromesa.grid(row = 2, column = 0)
+    epanumeromesa.grid(row = 3, column = 0)
 
     #Posicionamiento del label de numero de plato
-    lpanumeroplato.grid(row = 3, column = 0)
+    lpanumeroplato.grid(row = 4, column = 0)
 
     #Posicionamiento del entry de numero de plato
-    epanumeroplato.grid(row = 4, column = 0)
+    epanumeroplato.grid(row = 5, column = 0)
+    
+    #Se asigna un evento que al escribir en el entry de numero de plato, se actualice el label de visualizacion de platos
+    epanumeroplato.bind("<KeyRelease>", lambda event: sapactualizarlabelplato())
 
     #Posicionamiento del boton de actualizar pedido
-    baactualizarpedido.grid(row = 5, column = 0)
+    baactualizarpedido.grid(row = 6, column = 0)
 
     #Posicionamiento del frame de espacio superior derecho de la pantalla de actualizar pedido
     ftracpespace.grid(row = 0, column = 4)
