@@ -1,3 +1,9 @@
+#Integrante1: Joan Esteban Villamil Largo
+#
+#Docente: Luis German Toro Pareja
+#Numero de grupo:
+#Proyecto final
+#
 from configfile import *
 
 #Funciones
@@ -5,6 +11,7 @@ from configfile import *
 def regist():
     global pstate
 
+    #Titulo del programa en la pantalla de registro
     root.title(mrtitle + " - " + rtitle)
 
     #Variable del estado del programa en el valor de login y registro
@@ -35,6 +42,7 @@ def regist():
 def login():
     global pstate
 
+    #Titulo del programa en la pantalla de login
     root.title(mrtitle + " - " + ltitle)
 
     #Variable del estado del programa en el valor de login y registro
@@ -65,6 +73,7 @@ def login():
 def welcome():
     global pstate, usuario
 
+    #Titulo del programa en la pantalla de menu principal
     root.title(mrtitle + " - " + mptitle)
 
     #Variable del estado del programa en el valor de menu principal
@@ -93,6 +102,7 @@ def welcome():
 def gestionplatos():
     global pstate
 
+    #Titulo del programa en la pantalla de gestion de platos
     root.title(mrtitle + " - " + mptitle + " / " + gptitle)
 
     #Variable del estado del programa en el valor de gestion de platos
@@ -117,6 +127,7 @@ def gestionplatos():
 def agregarplato():
     global pstate
 
+    #Titulo del programa en la pantalla de agregar plato
     root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + aptitle)
 
     #Variable del estado del programa en el valor de agregar plato
@@ -138,6 +149,7 @@ def agregarplato():
 def eliminaractualizarplato():
     global pstate
 
+    #Titulo del programa en la pantalla de eliminar o actualizar plato
     root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle)
 
     #Variable del estado del programa en el valor de eliminar o actualizar plato
@@ -169,6 +181,7 @@ def eliminaractualizarplato():
     main.hide(fwelcome)
     main.hide(factualizarplato)
 
+    #Condicionales para verificar si la lista de platos esta vacia
     if len(lplatos) > 0:
         #Se organiza la lista de nombres de platos
         for i in range(len(lplatos)):
@@ -211,6 +224,7 @@ def actualizarplato():
         #Variable del estado del programa en el valor de actualizar plato
         pstate = 7
 
+        #Titulo del programa en la pantalla de actualizar plato
         root.title(mrtitle + " - " + mptitle + " / " + gptitle + " / " + eaptitle + " / " + acptitle)
 
         #Se agrega la pestaña de agregar plato
@@ -241,6 +255,7 @@ def actualizarplato():
 def gestionmesas():
     global pstate
 
+    #Titulo del programa en la pantalla de gestion de mesas
     root.title(mrtitle + " - " + mptitle + " / " + gmtitle)
 
     #Variable del estado del programa en el valor de gestion de mesas
@@ -265,6 +280,7 @@ def gestionmesas():
 def agregarmesa():
     global pstate
 
+    #Titulo del programa en la pantalla de agregar mesa
     root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + aptitle)
 
     #Variable del estado del programa en el valor de agregar mesa
@@ -286,6 +302,7 @@ def agregarmesa():
 def eliminaractualizarmesa():
     global pstate
 
+    #Titulo del programa en la pantalla de eliminar o actualizar mesa
     root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle)
 
     #Variable del estado del programa en el valor de eliminar o actualizar mesa
@@ -317,6 +334,7 @@ def eliminaractualizarmesa():
     main.hide(fwelcome)
     main.hide(factualizarmesa)
 
+    #Condicionales para verificar si la lista de mesas esta vacia
     if len(lmesas) > 0:
         #Se organiza la lista de numeros de mesas
         for i in range(len(lmesas)):
@@ -359,6 +377,7 @@ def actualizarmesa():
         #Variable del estado del programa en el valor de actualizar mesa
         pstate = 11
 
+        #Titulo del programa en la pantalla de actualizar mesa
         root.title(mrtitle + " - " + mptitle + " / " + gmtitle + " / " + eamtitle + " / " + acmtitle)
 
         #Se agrega la pestaña de agregar mesa
@@ -389,6 +408,7 @@ def actualizarmesa():
 def gestionpedidos():
     global pstate
 
+    #Titulo del programa en la pantalla de gestion de pedidos
     root.title(mrtitle + " - " + mptitle + " / " + gpetitle)
 
     #Variable del estado del programa en el valor de gestion de pedidos
@@ -413,6 +433,7 @@ def gestionpedidos():
 def agregarpedido():
     global pstate
 
+    #Titulo del programa en la pantalla de agregar pedido
     root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + apetitle)
 
     #Variable del estado del programa en el valor de agregar pedido
@@ -434,6 +455,7 @@ def agregarpedido():
 def eliminaractualizarpedido():
     global pstate
 
+    #Titulo del programa en la pantalla de eliminar o actualizar pedido
     root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + eapetitle)
 
     #Variable del estado del programa en el valor de eliminar o actualizar pedido
@@ -461,6 +483,7 @@ def eliminaractualizarpedido():
     main.hide(fwelcome)
     main.hide(factualizarpedido)
 
+    #Condicionales para verificar si la lista de pedidos esta vacia
     if len(lpedidos) > 0:
         #Se organiza la lista de numeros de platos de pedidos
         for i in range(len(lpedidos)):
@@ -487,6 +510,7 @@ def actualizarpedido():
         #Variable del estado del programa en el valor de actualizar pedido
         pstate = 15
 
+        #Titulo del programa en la pantalla de actualizar pedido
         root.title(mrtitle + " - " + mptitle + " / " + gpetitle + " / " + eapetitle + " / " + acpetitle)
 
         #Se agrega la pestaña de agregar pedido
@@ -615,6 +639,8 @@ def sagregarplato():
 
     #Lista temporal de platos
     tlplatos = []
+
+    #Variable de bandera
     bandera = False
     
     #Condicional para verificar si los campos estan vacios
@@ -692,6 +718,7 @@ def sactualizarplato():
     #Lista temporal de platos
     tlplatos = []
 
+    #Variable de bandera
     bandera = False
 
     #Condicional para verificar si los campos estan vacios
@@ -707,12 +734,13 @@ def sactualizarplato():
         messagebox.showerror("Error", "El precio del plato solo puede ser un numero y no puede ser negativo")
 
     else:
-        #Condicional para verificar si el plato ya existe
+        #Se construye la lista temporal de platos
         tlplatos.append(eanombreplato.get().lower())
         tlplatos.append(eaprecioplato.get())
         tlplatos.append(eadescripcionplato.get())
         tlplatos.append(eadisponibilidadplato.get().lower())
 
+        #Condicional para verificar si el plato ya existe
         for i in range(len(lplatos)):
             if lplatos[i][0] == eanombreplato.get().lower() and lplatos[i] == tlplatos:
                 messagebox.showerror("Error", "El plato ya existe")
@@ -720,6 +748,7 @@ def sactualizarplato():
                 break
 
             else:
+                #Se evalua si se trata del mismo plato
                 if bandera == False:
                     for j in range(len(lplatos)):
                         if lplatos[j][0] == eanombreplato.get().lower() and j != lbnplatos.curselection()[0]:
@@ -786,6 +815,7 @@ def sagregarmesa():
     #Lista temporal de mesas
     tlmesas = []
 
+    #Variable de bandera
     bandera = False
 
     #Condicional para verificar si los campos estan vacios
@@ -886,6 +916,7 @@ def sactualizarmesa():
     #Lista temporal de mesas
     tlmesas = []
 
+    #Variable de bandera
     bandera = False
 
     #Condicional para verificar si los campos estan vacios
@@ -919,12 +950,13 @@ def sactualizarmesa():
             messagebox.showerror("Error", "La hora de reservacion debe ser valida")
 
         else:
-            #Condicional para verificar si la reservacion de la mesa ya existe
+            #Se construye la lista temporal de mesas
             tlmesas.append(eanumeromesa.get())
             tlmesas.append(eafechareservacion.get())
             tlmesas.append(eahorareservacion.get())
             tlmesas.append(eanumeropersonas.get())
 
+            #Condicional para verificar si la reservacion de la mesa ya existe
             for i in range(len(lmesas)):
                 if lmesas[i][0] == eanumeromesa.get() and lmesas[i] == tlmesas:
                     messagebox.showerror("Error", "La mesa ya esta reservada")
@@ -932,6 +964,7 @@ def sactualizarmesa():
                     break
                 
                 else:
+                    #Se evalua si se trata de la misma mesa
                     if bandera == False:
                         for j in range(len(lmesas)):
                             if lmesas[j][0] == eanumeromesa.get() and j != lbnmesas.curselection()[0]:
@@ -1002,6 +1035,7 @@ def sagregarpedido():
     #Lista temporal de pedidos
     tlpedidos = []
 
+    #Variable de bandera
     bandera = False
 
     #Condicional para verificar si los campos estan vacios
@@ -1027,10 +1061,12 @@ def sagregarpedido():
             lplatos[int(epnumeroplato.get()) - 1][0]
             bandera = True
 
+        #Excepcion para cuando el numero de plato no existe
         except IndexError:
             messagebox.showerror("Error", "El numero de plato no existe")
             bandera = False
 
+        #Excepcion para cuando el numero de mesa no existe
         if bandera == True:
             for i in range(len(lmesas)):
                 if lmesas[i][0] == epnumeromesa.get():
@@ -1110,6 +1146,7 @@ def sactualizarpedido():
     #Lista temporal de pedidos
     tlpedidos = []
 
+    #Variable de bandera
     bandera = False
 
     #Condicional para verificar si los campos estan vacios
@@ -1135,10 +1172,12 @@ def sactualizarpedido():
             lplatos[int(epanumeroplato.get()) - 1][0]
             bandera = True
 
+        #Excepcion para cuando el numero de plato no existe
         except IndexError:
             messagebox.showerror("Error", "El numero de plato no existe")
             bandera = False
 
+        #Excepcion para cuando el numero de mesa no existe
         if bandera == True:
             for i in range(len(lmesas)):
                 if lmesas[i][0] == epanumeromesa.get():
@@ -1193,6 +1232,7 @@ def selneliminarpedido():
 
     lbnmpedidos.selection_set(lbnppedidos.curselection())
 
+    #Se actualiza el label de plato
     leapnombreplato.config(text = lplatos[int(lbnppedidos.get(lbnppedidos.curselection()[0])) - 1][0].capitalize())
 
 def selnpeliminarpedido():
@@ -1200,6 +1240,7 @@ def selnpeliminarpedido():
 
     lbnppedidos.selection_set(lbnmpedidos.curselection())
 
+    #Se actualiza el label de plato
     leapnombreplato.config(text = lplatos[int(lbnppedidos.get(lbnppedidos.curselection()[0])) - 1][0].capitalize())
 
 #Funcion para volver a la pantalla anterior

@@ -1,6 +1,9 @@
-# Description: Archivo de configuracion del programa
-# Autor: Joan Esteban Villamil Largo
-
+#Integrante1: Joan Esteban Villamil Largo
+#
+#Docente: Luis German Toro Pareja
+#Numero de grupo:
+#Proyecto final
+#
 #Importar librerias
 #Libreria para la interfaz grafica
 import tkinter
@@ -35,6 +38,12 @@ now = datetime.now()
 #7 = Actualizar platos
 #8 = Gestion de mesas
 #9 = Agregar mesas
+#10 = Eliminar o actualizar mesas
+#11 = Actualizar mesas
+#12 = Gestion de pedidos
+#13 = Agregar pedidos
+#14 = Eliminar o actualizar pedidos
+#15 = Actualizar pedidos
 pstate = 0
 
 #Variables de ruta de archivos
