@@ -1,1 +1,1 @@
-['admin, admin', 'joan.villamil@correounivalle.edu.co, 12345', 'melo74743@gmail.com, Melo74743.']
+['admin, admin', 'joan.villamil@correounivalle.edu.co, 12345', 'melo74743@gmail.com, Melo74743.', 'toro@gmail.com, aA1.000000']
